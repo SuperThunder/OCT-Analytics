@@ -8,12 +8,9 @@ import matplotlib.pylab as plt
 def pdt1(csvSource):
     csvFileName = csvSource + '.csv'
     dataFile = pd.read_csv(csvFileName)
-    print dataFile
+    columnNames = list(dataFile.columns.values)
+    print columnNames
 
-    '''
-    print dataFile.names
-    for row in dataFile:
-        print row[0]
-    '''
+
 
 pdt1("sample2.dbCSV")
