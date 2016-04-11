@@ -2,7 +2,6 @@
 
 import sqlite3
 import csv
-import datetime
 
 
 def toCSV(dbName):
@@ -23,12 +22,10 @@ def toCSV(dbName):
         for key in tableNames:
             nameList.append(key[1])  # 2nd value in table info is name
 
-
-        #colNameList = [tuple[0] for keys in dbCursor.description]
-        #print colNameList
+        # Write the column headers
         csvWriter.writerow(nameList)
+        # Write the column values
         for row in dbCursor:
-            #print tuple(row)
             csvWriter.writerow(row)
 
     dbConn.close()

@@ -8,7 +8,7 @@ import matplotlib.pylab as plt
 def pdt1(csvSource):
     csvFileName = csvSource + '.csv'
     dataFile = pd.read_csv(csvFileName)
-    columnNames = list(dataFile.columns.values)
+    columnNames = list(dataFile.columns.values)  # Get the column names
     print columnNames
 
 
