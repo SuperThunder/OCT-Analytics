@@ -1,4 +1,5 @@
 import csv
+import datetime
 
 # Makes a single column csv of all the stop times, sorted by time
 def makeTimesDB(csvName, stopID, route):
@@ -7,7 +8,7 @@ def makeTimesDB(csvName, stopID, route):
         with open('GTFSScheduledTimes'+stopID+'-'+route+'.csv', 'wb') as dest:
             csvReader = csv.reader(source)
             csvWriter = csv.writer(dest)
-
+            csvWriter.writerow(['Calendar Code', 'Time'])  # Write the column headers
 
             #valList.append([])  # Can probably replace this with a list comprehension in the declaration
             #valList.append([])
@@ -20,6 +21,7 @@ def makeTimesDB(csvName, stopID, route):
                     #print row[0], row[1]
                     csvRow = row[0], row[1]
                     tripList.append(row[0])  # Add the trip code
+                    # todo: reinterpret the datetime to a better sortable format!
                     timeList.append(row[1])  # Add the scheduled time
                     csvWriter.writerow([row[0], row[1]])
 
