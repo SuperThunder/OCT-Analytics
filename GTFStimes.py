@@ -1,38 +1,43 @@
 import csv
 import datetime
 
+
 # Makes a single column csv of all the stop times, sorted by time
 def makeTimesDB(csvName, stopID, route):
-    outputName = csvName + stopID + 'Times'
+
+    outputName = 'GTFSScheduledTimes'+stopID+'-'+route+'.csv'
+
+    print 'Opening CSVs'
+
     with open(csvName, 'rb') as source:
-        with open('GTFSScheduledTimes'+stopID+'-'+route+'.csv', 'wb') as dest:
+        with open(outputName, 'wb') as dest:
             csvReader = csv.reader(source)
             csvWriter = csv.writer(dest)
-            csvWriter.writerow(['Calendar Code', 'Time'])  # Write the column headers
+            csvWriter.writerow(['Trip', 'Service ID', 'Time'])  # Write the column headers
 
-            #valList.append([])  # Can probably replace this with a list comprehension in the declaration
-            #valList.append([])
-            #valDict = {}
-            #valDict
-            tripList = []
-            timeList = []
             for row in csvReader:
                 if row[3] == stopID:
-                    #print row[0], row[1]
-                    csvRow = row[0], row[1]
-                    tripList.append(row[0])  # Add the trip code
-                    # todo: reinterpret the datetime to a better sortable format!
-                    timeList.append(row[1])  # Add the scheduled time
-                    csvWriter.writerow([row[0], row[1]])
+                    schTime = datetime.datetime.strptime(row[1], '%H:%M:%S')
+                    newTime = datetime.datetime.strftime(schTime, '%H%M%S')
 
-                    #valList[0].append(row[0])
-                    #valList[1].append(row[1])
-                    #valList.append({row[0]: row[1]})
-                    #addToDict(valDict, row[0], row[1])
+                    # Need to split the tripID into its trip number and calendar code parts
+                    trip, serviceID = splitTripID(row[0])
 
-            #print valDict
+                    csvWriter.writerow([serviceID, trip, newTime])
 
-            #print sorted([tuple(map(int, d.split(":"))) for d in valList[1]])
+            print "Scraping complete"
+
+def splitTripID(tripID):
+    ind = tripID.find('-')
+    trip = ''
+    serviceID = ''
+    for i in range(0, ind):
+        trip += tripID[i]
+
+    for i in range(ind+1, len(tripID)):
+        serviceID += tripID[i]
+
+    return trip, serviceID
 
 # http://stackoverflow.com/questions/18817789/how-to-add-values-to-existing-dictionary-key-python
 def addToDict(valDict, key, value):
