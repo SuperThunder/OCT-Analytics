@@ -4,7 +4,7 @@ import operator
 
 
 # Makes a single column csv of all the stop times, sorted by time
-def makeTimesDB(csvName, stopID, route):
+def getStopSchInfo(csvName, stopID, route):
 
     outputName = 'GTFSScheduledTimes'+stopID+'-'+route+'.csv'
 
@@ -29,10 +29,8 @@ def makeTimesDB(csvName, stopID, route):
 
                     valList.append((serviceID, trip, newTime))
 
-                    #csvWriter.writerow([serviceID, trip, newTime])
-
-            valList.sort(key=operator.itemgetter(0))
-            valList.sort(key=operator.itemgetter(2))
+            # Sort by Calendar code then time to get all the times of each group in order
+            valList.sort(key=operator.itemgetter(0, 2))
 
             for item in valList:
                 csvWriter.writerow(item)
@@ -53,6 +51,7 @@ def splitTripID(tripID):
 
     return trip, serviceID
 
+'''
 # http://stackoverflow.com/questions/18817789/how-to-add-values-to-existing-dictionary-key-python
 def addToDict(valDict, key, value):
     if key in valDict:
@@ -62,5 +61,6 @@ def addToDict(valDict, key, value):
 
 
     #return valDict
+'''
 
-makeTimesDB('./google_transit/stop_times.csv', 'AA060', '9')
+getStopSchInfo('./google_transit/stop_times.csv', 'AA060', '9')
