@@ -1,5 +1,6 @@
 import csv
 import datetime
+import operator
 
 
 # Makes a single column csv of all the stop times, sorted by time
@@ -8,6 +9,9 @@ def makeTimesDB(csvName, stopID, route):
     outputName = 'GTFSScheduledTimes'+stopID+'-'+route+'.csv'
 
     print 'Opening CSVs'
+
+    #valList = [('Trip', 'Service ID', 'Time')]
+    valList = []
 
     with open(csvName, 'rb') as source:
         with open(outputName, 'wb') as dest:
@@ -23,9 +27,19 @@ def makeTimesDB(csvName, stopID, route):
                     # Need to split the tripID into its trip number and calendar code parts
                     trip, serviceID = splitTripID(row[0])
 
-                    csvWriter.writerow([serviceID, trip, newTime])
+                    valList.append((serviceID, trip, newTime))
 
-            print "Scraping complete"
+                    #csvWriter.writerow([serviceID, trip, newTime])
+
+            valList.sort(key=operator.itemgetter(0))
+            valList.sort(key=operator.itemgetter(2))
+
+            for item in valList:
+                csvWriter.writerow(item)
+
+    print "Scraping complete"
+
+
 
 def splitTripID(tripID):
     ind = tripID.find('-')
