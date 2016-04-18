@@ -1,11 +1,10 @@
-import datetime
 import pandas as pd
 
 # Converts the datetime string to a different format
-def toHour(csvName, dtFormat):
+def toNewDTFormat(csvName, dtFormat):
     oldCSV = csvName + '.csv'
-    newCSV = csvName + 'Hours' + '.csv'
-    if dtFormat == 'def':
+    newCSV = csvName + dtFormat + '.csv'
+    if dtFormat == 'def':  # option for sane default
         dtFormat = "%Y%m%d%H%M%S"
 
     # Open the source CSV and also parse all the datetimes in column 3 (PollTime)
@@ -13,4 +12,4 @@ def toHour(csvName, dtFormat):
     # Writes the CSV to a new file with the datetimes in a different format
     source.to_csv(newCSV, mode='wb', date_format=dtFormat)
 
-toHour("sample2.dbCSV", "%H")
+#toNewDTFormat("sample2.dbCSV", "%H")
