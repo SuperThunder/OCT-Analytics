@@ -69,9 +69,16 @@ def splitIntoAttributes(liveData, liveAttribData):
 def getScheduledTimes(startDate, endDate, scheduleCSV):
     exclDates = genExclusionDays()
     print "Exclusion dates: ", exclDates
-    tripDates = retDates()
+    tripDates = retServiceID_DateRanges()
     print 'Trip date ranges: ', tripDates
+
+    timeDiff = endDate - startDate  # This gives us a timedelta class result
+
     with open(scheduleCSV+'.csv', 'rb') as schData:
+        for i in range(0, timeDiff.days+2):  # Account for two off by ones: timeDiff.days, and the range not being upper inclusive
+            curDatetime = startDate + datetime.timedelta(days = i)
+            print curDatetime
+
 
         print ''
 
@@ -87,20 +94,20 @@ def genExclusionDays():
     return exclDatesDict
 
 # Hardcoded for specific busses, won't work with everything
-def retDates():
+def retServiceID_DateRanges():
     with open('./google_transit/calendar.txt', 'rb') as trips:
         tripsCSV = csv.reader(trips)
         tripDates = defaultdict(list)
         next(tripsCSV, None)  # skip header
-        # luckily only need first 6 rows of data
+        # luckily only need first 6 rows of data for the 9 schedule. this is the hardcoded part.
         i = 0
         for row in tripsCSV:
-            print i, row
-            if i <= 5:
-                tripDates[row[0]].append([row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]])
+            if i < 6:
+                tripDates[row[0]].append([bool(row[1]), bool(row[2]), bool(row[3]), bool(row[4]), bool(row[5]),
+                                          bool(row[6]), bool(row[7]), row[8], row[9]])
             i += 1
 
-        return tripDates
+    return tripDates
 
 
 schVsEst('sample2.dbCSV', 'GTFSScheduledTimesAA060-9')
