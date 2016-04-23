@@ -22,17 +22,13 @@ def schVsEst(liveCSV, scheduleCSV):
     with open(attribFileName, 'rb') as attribs:
         csvAttribReader = csv.reader(attribs)
 
-        # Skip header row of attributes
-        #next(csvAttribReader, None)
-        #firstAttribRow = csvAttribReader.next()
-
         # get first row by skipping header
         next(csvAttribReader, None)
         firstAttribRow = csvAttribReader.next()
         for row in csvAttribReader:
             curRow = row
 
-        lastAttribRow = curRow
+        lastAttribRow = curRow  # last value assigned to curRow will have been the last row of the CSV
         print 'Start row: ', firstAttribRow
         startDatetime = datetime.datetime.strptime(firstAttribRow[12], '%a %b %d %H:%M:%S %Y')
         print 'End row: ', lastAttribRow
@@ -74,9 +70,11 @@ def getScheduledTimes(startDate, endDate, scheduleCSV):
 
     timeDiff = endDate - startDate  # This gives us a timedelta class result
 
+    # todo: finish finding all scheduled times here
     with open(scheduleCSV+'.csv', 'rb') as schData:
+        # Go through all the days we have live data for here
         for i in range(0, timeDiff.days+2):  # Account for two off by ones: timeDiff.days, and the range not being upper inclusive
-            curDatetime = startDate + datetime.timedelta(days = i)
+            curDatetime = startDate + datetime.timedelta(days=i)
             print curDatetime
 
 
@@ -104,10 +102,16 @@ def retServiceID_DateRanges():
         for row in tripsCSV:
             if i < 6:
                 tripDates[row[0]].append([bool(row[1]), bool(row[2]), bool(row[3]), bool(row[4]), bool(row[5]),
-                                          bool(row[6]), bool(row[7]), row[8], row[9]])
+                                          bool(row[6]), bool(row[7]), datetime.datetime.strptime(row[8], '%Y%M%d'),
+                                          datetime.datetime.strptime(row[9], '%Y%M%d')])
             i += 1
 
     return tripDates
 
+'''
+def checkIfExclDay(day, exclDays):
+    for days in exclDays:
+        if day == days:
+'''
 
 schVsEst('sample2.dbCSV', 'GTFSScheduledTimesAA060-9')
