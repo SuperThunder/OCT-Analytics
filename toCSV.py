@@ -1,13 +1,13 @@
 # Takes the DB format used up until 2016-04-02 and converts the relevant values to CSV
+# As it turns out it handles the new format fine too. I'm a better future-proofer than I thought
 
 import sqlite3
 import csv
 
 
 def toCSV(dbName):
-    dbName += '.db'
-    dbConn = sqlite3.connect(dbName)
-    #curs = dbConn.cursor()
+    dbFilename = dbName + '.db'
+    dbConn = sqlite3.connect(dbFilename)
 
     csvName = dbName + 'CSV.csv'
     # Open file in write-only binary mode to ensure Windows doesn't interfere with writing

@@ -10,14 +10,13 @@ def getStopSchInfo(csvName, stopID, route):
 
     print 'Opening CSVs'
 
-    #valList = [('Trip', 'Service ID', 'Time')]
     valList = []
 
     with open(csvName, 'rb') as source:
         with open(outputName, 'wb') as dest:
             csvReader = csv.reader(source)
             csvWriter = csv.writer(dest)
-            csvWriter.writerow(['Trip', 'Service ID', 'Time'])  # Write the column headers
+            csvWriter.writerow(['Service ID', 'Trip', 'Time'])  # Write the column headers
 
             for row in csvReader:
                 if row[3] == stopID:
@@ -38,7 +37,6 @@ def getStopSchInfo(csvName, stopID, route):
     print "Scraping complete"
 
 
-
 def splitTripID(tripID):
     ind = tripID.find('-')
     trip = ''
@@ -51,16 +49,5 @@ def splitTripID(tripID):
 
     return trip, serviceID
 
-'''
-# http://stackoverflow.com/questions/18817789/how-to-add-values-to-existing-dictionary-key-python
-def addToDict(valDict, key, value):
-    if key in valDict:
-        valDict[key].update({key:value})
-    else:
-        valDict[key] = value
 
-
-    #return valDict
-'''
-
-getStopSchInfo('./google_transit/stop_times.csv', 'AA060', '9')
+getStopSchInfo('./google_transit_combined/stop_times.txt', 'AA060', '9')

@@ -41,6 +41,7 @@ def schVsEst(liveCSV, scheduleCSV):
             with open('Attributes and Time Discrepencies.csv', 'wb') as descr:
                 csvAttribReader = csv.reader(attribs)
                 csvDescrWriter = csv.writer(descr)
+                print scheduledTimes
                 # need to iterate through the scheduled times in the time for which we have live times
 
 
@@ -64,88 +65,109 @@ def splitIntoAttributes(liveData, liveAttribData):
 # return them as a dictionary of a date to its scheduled times
 def getScheduledTimes(startDate, endDate, scheduleCSV):
     exclDatesDict = genExclusionDays()
-    exclDates = exclDatesDict.keys()
     print "Exclusion dates: ", exclDatesDict
-    '''
-    tripDatesDict = retServiceID_DateRanges()
-    tripServiceIDs = tripDatesDict.keys()
-    print 'Trip date ranges: ', tripDatesDict
-    '''
     tripDates = retServiceID_DateRanges()
     print 'Trip date ranges: ', tripDates
 
-    timeDiff = endDate - startDate  # This gives us a timedelta class result
-
-    serviceIDDates = OrderedDict()  # Nice to have an ordered dict as it keeps earliest dates first
-    expectedArrivals = []
-    # todo: finish finding all scheduled times here
+    serviceIDDates = matchDateToID(exclDatesDict, tripDates, startDate, endDate)
+    print 'Service IDs: ', serviceIDDates
+    allArrivals = []
+    serviceIDTimes = []  # Contains a list of a service ID class matched to its daily arrival times
+    # Matches service IDs to their daily arrival times
     with open(scheduleCSV+'.csv', 'rb') as schData:
-        # Go through all the days we have live data for here
-        for i in range(0, timeDiff.days+2):  # Account for two off by ones: timeDiff.days, and the range not being upper inclusive
-            curDatetime = startDate + datetime.timedelta(days=i)  # Add days to our starting date
-            curDatetimeStr = datetime.datetime.strftime(curDatetime, '%Y%m%d')
-            # Check if the date is a special exclusion date defined by calendar_dates
-            if curDatetimeStr in exclDates:
-                serviceIDDates[curDatetimeStr] = exclDatesDict[curDatetimeStr]
-            # Otherwise find the regular schedule ID
+        schDataCSV = csv.reader(schData)
+        next(schDataCSV, None)
+        curID = ''
+        numIDAdded = -1
+        for row in schDataCSV:
+            if curID == row[0]:
+                # Some of the stop times are duplicated, so avoid adding duplicate times here
+                # Ideally the stop times combined file just wouldn't be duplicated in places
+                if serviceIDTimes[numIDAdded].arrivals[len(serviceIDTimes[numIDAdded].arrivals)-1] != row[2]:
+                    serviceIDTimes[numIDAdded].arrivals.append(row[2])
+                #print serviceIDTimes[numIDAdded].arrivals
             else:
-                for dr in tripDates:
-                    if dr.start < curDatetime < dr.end:  # Check the date is within the range of the service ID
-                        #print 'within range for', dr.serviceID, curDatetimeStr
-                        if dr.weekdays[curDatetime.weekday()] == '1':  # Then check it is the right day of the week
-                            #print 'match for ', dr.serviceID
-                            serviceIDDates[curDatetimeStr] = dr.serviceID
-                '''
-                for val in tripDatesDict.itervalues():
-                    print ''
-                for key in tripServiceIDs:
-                    print key, tripDatesDict
-                    serv = list(tripDatesDict[key])
+                curID = row[0]
+                numIDAdded += 1
+                arrivalObj = IDArrivals(arrivals=[row[2]], serviceID=row[0])
+                serviceIDTimes.append(arrivalObj)
 
-                    if serv[7] < curDatetime < serv[8]:
-                        print ''
-                '''
+    for date in serviceIDDates:
+        for arrivals in serviceIDTimes:
+            if serviceIDDates[date] == arrivals.serviceID:
+                allArrivals.append(dailyArrivals(date, serviceIDDates[date], arrivals.arrivals))
+                #print date, serviceIDDates[date], arrivals.arrivals
 
-        print 'Service IDs: ', serviceIDDates
+    print 'Days and their arrival times: '
+    for days in allArrivals:
+        print days.day, days.arrivals
+
+    return allArrivals
+
+
 
 
 
 
 def genExclusionDays():
-    with open('./google_transit/calendar_dates.txt', 'rb') as exclDates:
+    with open('./google_transit_combined/calendar_dates.txt', 'rb') as exclDates:
         exclDatesCSV = csv.reader(exclDates)
-        #exclDatesDicts = []
-        exclDatesDict = defaultdict(list)
+        exclDatesDict = defaultdict(str)
         next(exclDatesCSV, None)  # skip header
         for row in exclDatesCSV:
             if row[2] == '2':  # Check that the exception type is service added and not removed
-                exclDatesDict[row[1]].append(row[0])
+                exclDatesDict[row[1]] = row[0]
 
     return exclDatesDict
 
+
 # Hardcoded for specific busses, won't work with everything
 def retServiceID_DateRanges():
-    with open('./google_transit/calendar.txt', 'rb') as trips:
+    with open('./google_transit_combined/calendar.txt', 'rb') as trips:
         calendarCSV = csv.reader(trips)
-        calendarDates = defaultdict(list)
         calendarRanges = []
         next(calendarCSV, None)  # skip header
         # luckily only need first 6 rows of data for the 9 schedule. this is the hardcoded part.
+        # Otherwise we would have to somehow know the service ID of our trip in advance
         i = 0
         for row in calendarCSV:
-            if i < 6:
-                daterange = serviceIDDateRange(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7],
+            #if i < 6:
+            daterange = serviceIDDateRange(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7],
                                                datetime.datetime.strptime(row[8], '%Y%m%d'),
                                                datetime.datetime.strptime(row[9], '%Y%m%d'))
-                calendarRanges.append(daterange)
-                '''
-                calendarDates[row[0]].append([row[1], row[2], row[3], row[4], row[5],
-                                          row[6], row[7], datetime.datetime.strptime(row[8], '%Y%m%d'),
-                                          datetime.datetime.strptime(row[9], '%Y%m%d')])
-                '''
+            calendarRanges.append(daterange)
             i += 1
 
     return calendarRanges
+
+
+# Matches each date to its appropriate service ID by checking whether it is an exclusion date or a normal day
+def matchDateToID(exclDatesDict, tripDates, startDate, endDate):
+    exclDates = exclDatesDict.keys()
+    timeDiff = endDate - startDate  # This gives us a timedelta class result
+    serviceIDDates = OrderedDict()  # Nice to have an ordered dict as it keeps earliest dates first
+    # Go through all the days we have live data for here
+    for i in range(0, timeDiff.days+1):
+        curDatetime = startDate + datetime.timedelta(days=i)  # Add days to our starting date
+        curDatetimeStr = datetime.datetime.strftime(curDatetime, '%Y%m%d')
+        # Check if the date is a special exclusion date defined by calendar_dates
+        if curDatetimeStr in exclDates:
+            serviceIDDates[curDatetimeStr] = exclDatesDict[curDatetimeStr]
+        # Otherwise find the regular schedule ID
+        else:
+            for dr in tripDates:
+                ''' not totally sure how reliably the system will handle dates past the 22nd of april
+                if curDatetime > datetime.datetime.strptime('201604222359', '%Y%m%d%H%M'):
+                    print 'Date out of range of old schedule', curDatetime
+                '''
+                if dr.start < curDatetime < dr.end:  # Check the date is within the range of the service ID
+                    #print 'within range for', dr.serviceID, curDatetimeStr
+                    if dr.weekdays[curDatetime.weekday()] == '1':  # Then check it is the right day of the week
+                        #print 'match for ', dr.serviceID
+                        serviceIDDates[curDatetimeStr] = dr.serviceID
+
+    return serviceIDDates
+
 
 # Class that is much saner to use for service range information than a dictionary
 class serviceIDDateRange:
@@ -155,11 +177,15 @@ class serviceIDDateRange:
         self.start = start
         self.end = end
 
+class IDArrivals:
+    def __init__(self, serviceID, arrivals):
+        self.serviceID = serviceID
+        self.arrivals = arrivals
 
-'''
-def checkIfExclDay(day, exclDays):
-    for days in exclDays:
-        if day == days:
-'''
+class dailyArrivals:
+        def __init__(self, day, serviceID, arrivals):
+            self.day = day
+            self.serviceID = serviceID
+            self.arrivals = arrivals
 
-schVsEst('sample2.dbCSV', 'GTFSScheduledTimesAA060-9')
+schVsEst('sample4CSV', 'GTFSScheduledTimesAA060-9')
