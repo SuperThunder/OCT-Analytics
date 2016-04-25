@@ -80,7 +80,7 @@ def splitIntoAttributes(liveData, liveAttribData):
                       10: 'Oct', 11: 'Nov', 12: 'Dec'}
         # note: getting the weekday is an instance method, everything else is a object class attribute
         attribRow = [row[0], row[1], timeObj.year, monthNames[timeObj.month], timeObj.month, timeObj.isoweekday(),
-                     timeObj.day, timeObj.hour, timeObj.minute, timeObj.second, row[3], row[4], row[2]]
+                     timeObj.day, timeObj.hour, timeObj.minute, timeObj.second, row[3], row[5], row[2]]
         liveAttribData.writerow(attribRow)
 
 
