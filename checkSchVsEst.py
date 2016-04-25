@@ -44,8 +44,7 @@ def schVsEst(liveCSV, scheduleCSV):
         for row in csvAttribReader:
             liveTimes.append(liveEstimates(stopnum=row[0], routenum=row[1], polltime=row[12],
                                            timetonext=row[10], timeto2nd=row[11]))
-
-    with open('Attributes and Time Discrepencies'+liveCSV, +'.csv', 'wb') as discr:
+    with open('Attributes and Time Discrepencies'+liveCSV+ '.csv', 'wb') as discr:
         csvDiscrWriter = csv.writer(discr)
         csvDiscrWriter.writerow(['StopNum', 'RouteNum', 'PollTimeYear', 'PollTimeMonth', 'PollTimeMonthNum',
                          'PollTimeWeekday', 'PollTimeDay', 'PollTimeHour', 'PollTimeMinute', 'PollTimeSecond',
