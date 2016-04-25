@@ -3,7 +3,7 @@ import csv
 from collections import defaultdict, OrderedDict
 
 # Split data into as small attributes as possible and find difference between scheduled time and estimate at that time
-def schVsEst(liveCSV, scheduleCSV):
+def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
 
     attribFileName = 'Attributes of '+liveCSV+'.csv'
     # Split poll times of live data into specific attributes
@@ -57,6 +57,7 @@ def schVsEst(liveCSV, scheduleCSV):
         for day in scheduledTimes:
             for arrival in day.arrivals:
                 arrivalTime = datetime.datetime.strptime(day.day+arrival, '%Y%m%d%H%M%S')
+                arrivalTime += datetime.timedelta(minutes=minsBeforeArrival)
                 for timeEst in liveTimes:
                     if datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y') == arrivalTime:
                         print timeEst.PollTime, timeEst.TimeToNext
@@ -86,6 +87,7 @@ def splitIntoAttributes(liveData, liveAttribData):
 
 # need to iterate through the scheduled times in the time for which we have live times
 # return them as a dictionary of a date to its scheduled times
+# todo: it would probably be useful if all these scheduled arrivals ended up in a CSV of their own
 def getScheduledTimes(startDate, endDate, scheduleCSV):
     exclDatesDict = genExclusionDays()
     print "Exclusion dates: ", exclDatesDict
@@ -187,6 +189,10 @@ def matchDateToID(exclDatesDict, tripDates, startDate, endDate):
 
     return serviceIDDates
 
+# todo: write this function
+def writeScheduledArrivalstoCSV(allArrivals, startDate, endDate):
+    print ''
+
 
 # Class that is much saner to use for service range information than a dictionary
 class serviceIDDateRange:
@@ -216,4 +222,4 @@ class liveEstimates:
         self.TimeTo2nd = timeto2nd  # the estimated time to the 2nd next bus
 
 
-schVsEst('sample4CSV', 'GTFSScheduledTimesAA060-9')
+schVsEst('sample2.dbCSV', 'GTFSScheduledTimesAA060-9', -2)
