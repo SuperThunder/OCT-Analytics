@@ -36,13 +36,37 @@ def schVsEst(liveCSV, scheduleCSV):
 
     scheduledTimes = getScheduledTimes(startDatetime, endDatetime, scheduleCSV)
 
+    liveTimes = []
     # Find the discrepancy of scheduled and live times
     with open('Attributes of '+liveCSV+'.csv', 'rb') as attribs:
-            with open('Attributes and Time Discrepencies.csv', 'wb') as descr:
-                csvAttribReader = csv.reader(attribs)
-                csvDescrWriter = csv.writer(descr)
-                print scheduledTimes
-                # need to iterate through the scheduled times in the time for which we have live times
+        csvAttribReader = csv.reader(attribs)
+        next(csvAttribReader, None)
+        for row in csvAttribReader:
+            liveTimes.append(liveEstimates(stopnum=row[0], routenum=row[1], polltime=row[12],
+                                           timetonext=row[10], timeto2nd=row[11]))
+
+    with open('Attributes and Time Discrepencies'+liveCSV, +'.csv', 'wb') as discr:
+        csvDiscrWriter = csv.writer(discr)
+        csvDiscrWriter.writerow(['StopNum', 'RouteNum', 'PollTimeYear', 'PollTimeMonth', 'PollTimeMonthNum',
+                         'PollTimeWeekday', 'PollTimeDay', 'PollTimeHour', 'PollTimeMinute', 'PollTimeSecond',
+                         'TimeToNext', 'TimeTo2nd', 'FullPollTime', 'ScheduledTime', 'Discrepancy'])
+        #print scheduledTimes
+        # need to iterate through the scheduled times in the time for which we have live times
+        # todo: this is really really slow. set up the live times so they can be found by day. ordered dict?
+        monthNames = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep',
+                      10: 'Oct', 11: 'Nov', 12: 'Dec'}
+        for day in scheduledTimes:
+            for arrival in day.arrivals:
+                arrivalTime = datetime.datetime.strptime(day.day+arrival, '%Y%m%d%H%M%S')
+                for timeEst in liveTimes:
+                    if datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y') == arrivalTime:
+                        print timeEst.PollTime, timeEst.TimeToNext
+                        timeObj = datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y')
+                        row = [timeEst.StopNum, timeEst.RouteNum, timeObj.year, monthNames[timeObj.month],
+                               timeObj.month, timeObj.isoweekday(), timeObj.day, timeObj.hour, timeObj.minute,
+                               timeObj.second, timeEst.TimeToNext, timeEst.TimeTo2nd, timeEst.PollTime,
+                               arrival]
+                        csvDiscrWriter.writerow(row)
 
 
 
@@ -103,10 +127,6 @@ def getScheduledTimes(startDate, endDate, scheduleCSV):
         print days.day, days.arrivals
 
     return allArrivals
-
-
-
-
 
 
 def genExclusionDays():
@@ -187,5 +207,14 @@ class dailyArrivals:
             self.day = day
             self.serviceID = serviceID
             self.arrivals = arrivals
+
+class liveEstimates:
+    def __init__(self, stopnum, routenum, polltime, timetonext, timeto2nd):
+        self.StopNum = stopnum  # OC Transpo stop number
+        self.RouteNum = routenum  # OC Transpo bus route number
+        self.PollTime = polltime  # the date and time at which the API call was made
+        self.TimeToNext = timetonext  # the estimated time to the next bus arrival at StopNum of the RouteNum bus
+        self.TimeTo2nd = timeto2nd  # the estimated time to the 2nd next bus
+
 
 schVsEst('sample4CSV', 'GTFSScheduledTimesAA060-9')
