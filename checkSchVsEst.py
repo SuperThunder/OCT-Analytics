@@ -171,14 +171,14 @@ def retServiceID_DateRanges():
         next(calendarCSV, None)  # skip header
         # luckily only need first 6 rows of data for the 9 schedule. this is the hardcoded part.
         # Otherwise we would have to somehow know the service ID of our trip in advance
-        i = 0
+        #i = 0
         for row in calendarCSV:
             #if i < 6:
             daterange = serviceIDDateRange(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7],
                                                datetime.datetime.strptime(row[8], '%Y%m%d'),
                                                datetime.datetime.strptime(row[9], '%Y%m%d'))
             calendarRanges.append(daterange)
-            i += 1
+            #i += 1
 
     return calendarRanges
 
