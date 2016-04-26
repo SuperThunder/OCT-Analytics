@@ -67,7 +67,7 @@ def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
                 arrivalTime += datetime.timedelta(minutes=-1*minsBeforeArrival)
                 for timeEst in liveTimes:
                     if datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y') == arrivalTime:
-                        #print timeEst.PollTime, timeEst.TimeToNext
+                        print timeEst.PollTime, timeEst.TimeToNext
                         timeObj = datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y')
                         row = [timeEst.StopNum, timeEst.RouteNum, timeObj.year, monthNames[timeObj.month],
                                timeObj.month, timeObj.isoweekday(), timeObj.day, timeObj.hour, timeObj.minute,
