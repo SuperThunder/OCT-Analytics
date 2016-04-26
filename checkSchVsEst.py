@@ -7,7 +7,7 @@ def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
 
     attribFileName = 'Attributes of '+liveCSV+'.csv'
     # Split poll times of live data into specific attributes
-    with open(liveCSV+'.csv', 'rb') as liveData:
+    with open(liveCSV+'CSV.csv', 'rb') as liveData:
             with open(attribFileName, 'wb') as attribs:
                 csvLiveReader = csv.reader(liveData)
                 csvAttribWriter = csv.writer(attribs)
@@ -35,6 +35,10 @@ def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
         endDatetime = datetime.datetime.strptime(lastAttribRow[12], '%a %b %d %H:%M:%S %Y')
 
     scheduledTimes = getScheduledTimes(startDatetime, endDatetime, scheduleCSV)
+    '''
+    for arrival in scheduledTimes:
+        print arrival.day
+    '''
 
     liveTimes = []
     # Find the discrepancy of scheduled and live times
@@ -44,30 +48,32 @@ def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
         for row in csvAttribReader:
             liveTimes.append(liveEstimates(stopnum=row[0], routenum=row[1], polltime=row[12],
                                            timetonext=row[10], timeto2nd=row[11]))
-    with open('Attributes and Time Discrepencies'+liveCSV+ '.csv', 'wb') as discr:
+    with open('Attributes and Time Discrepencies'+liveCSV+'t-'+str(minsBeforeArrival)+'mins.csv', 'wb') as discr:
         csvDiscrWriter = csv.writer(discr)
         csvDiscrWriter.writerow(['StopNum', 'RouteNum', 'PollTimeYear', 'PollTimeMonth', 'PollTimeMonthNum',
                          'PollTimeWeekday', 'PollTimeDay', 'PollTimeHour', 'PollTimeMinute', 'PollTimeSecond',
                          'TimeToNext', 'TimeTo2nd', 'FullPollTime', 'ScheduledTime', 'Discrepancy'])
         #print scheduledTimes
         # need to iterate through the scheduled times in the time for which we have live times
-        # todo: this is really really slow. set up the live times so they can be found by day. ordered dict?
         monthNames = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep',
                       10: 'Oct', 11: 'Nov', 12: 'Dec'}
+
+        # todo: this is really really slow. set up the live times so they can be found by day. ordered dict?
+        print 'matching scheduled times to estimates'
         for day in scheduledTimes:
             for arrival in day.arrivals:
                 arrivalTime = datetime.datetime.strptime(day.day+arrival, '%Y%m%d%H%M%S')
-                arrivalTime += datetime.timedelta(minutes=minsBeforeArrival)
+                arrivalTime += datetime.timedelta(minutes=-1*minsBeforeArrival)
                 for timeEst in liveTimes:
                     if datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y') == arrivalTime:
-                        print timeEst.PollTime, timeEst.TimeToNext
+                        #print timeEst.PollTime, timeEst.TimeToNext
                         timeObj = datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y')
                         row = [timeEst.StopNum, timeEst.RouteNum, timeObj.year, monthNames[timeObj.month],
                                timeObj.month, timeObj.isoweekday(), timeObj.day, timeObj.hour, timeObj.minute,
                                timeObj.second, timeEst.TimeToNext, timeEst.TimeTo2nd, timeEst.PollTime,
                                arrival]
                         csvDiscrWriter.writerow(row)
-
+        print 'done'
 
 
 def splitIntoAttributes(liveData, liveAttribData):
@@ -83,6 +89,7 @@ def splitIntoAttributes(liveData, liveAttribData):
         attribRow = [row[0], row[1], timeObj.year, monthNames[timeObj.month], timeObj.month, timeObj.isoweekday(),
                      timeObj.day, timeObj.hour, timeObj.minute, timeObj.second, row[3], row[5], row[2]]
         liveAttribData.writerow(attribRow)
+        # todo: chance row[4] back to row[5] when not dealing with legacy data
 
 
 # need to iterate through the scheduled times in the time for which we have live times
@@ -92,7 +99,10 @@ def getScheduledTimes(startDate, endDate, scheduleCSV):
     exclDatesDict = genExclusionDays()
     print "Exclusion dates: ", exclDatesDict
     tripDates = retServiceID_DateRanges()
-    print 'Trip date ranges: ', tripDates
+    print 'Trip date ranges: ',
+    for date in tripDates:
+        print date.start, date.end, date.serviceID, '  ',
+    print ''
 
     serviceIDDates = matchDateToID(exclDatesDict, tripDates, startDate, endDate)
     print 'Service IDs: ', serviceIDDates
@@ -117,16 +127,27 @@ def getScheduledTimes(startDate, endDate, scheduleCSV):
                 arrivalObj = IDArrivals(arrivals=[row[2]], serviceID=row[0])
                 serviceIDTimes.append(arrivalObj)
 
+    # Go through every date recorded with its service ID and get the arrival times for that service ID
+    # debug: almost all the dates were still as they should be in serviceIDDates, but are not getting matched
+    # known missing even before ID matching: 17,22,23
+    print 'serviceIDDates: ', serviceIDDates
     for date in serviceIDDates:
         for arrivals in serviceIDTimes:
+            #todo: at this point not all the dates are getting matched to a service ID
             if serviceIDDates[date] == arrivals.serviceID:
+                print 'matched ', date, ' to ', arrivals.serviceID
                 allArrivals.append(dailyArrivals(date, serviceIDDates[date], arrivals.arrivals))
                 #print date, serviceIDDates[date], arrivals.arrivals
+            else:
+                #print 'was not able to match date', date, 'with serviceID', serviceIDDates[date]
+                pass
 
+    # Display all arrivals
     print 'Days and their arrival times: '
     for days in allArrivals:
         print days.day, days.arrivals
 
+    writeScheduledArrivalstoCSV(allArrivals, startDate, endDate)
     return allArrivals
 
 
@@ -181,17 +202,26 @@ def matchDateToID(exclDatesDict, tripDates, startDate, endDate):
                 if curDatetime > datetime.datetime.strptime('201604222359', '%Y%m%d%H%M'):
                     print 'Date out of range of old schedule', curDatetime
                 '''
-                if dr.start < curDatetime < dr.end:  # Check the date is within the range of the service ID
+                if dr.start <= curDatetime <= dr.end:  # Check the date is within the range of the service ID
                     #print 'within range for', dr.serviceID, curDatetimeStr
                     if dr.weekdays[curDatetime.weekday()] == '1':  # Then check it is the right day of the week
                         #print 'match for ', dr.serviceID
                         serviceIDDates[curDatetimeStr] = dr.serviceID
-
     return serviceIDDates
 
-# todo: write this function
+
+# Writes all the scheduled times found in the date range to CSV
 def writeScheduledArrivalstoCSV(allArrivals, startDate, endDate):
-    print ''
+    startDateStr = datetime.datetime.strftime(startDate, '%Y%m%d')
+    endDateStr = datetime.datetime.strftime(endDate, '%Y%m%d')
+    csvName = 'ScheduledArrivals'+startDateStr+'to'+endDateStr+'.csv'
+    with open(csvName, 'wb') as dest:
+        csvWriter = csv.writer(dest)
+        csvWriter.writerow(['Day', 'ServiceID', 'Arrivals'])
+        for day in allArrivals:
+            for arrival in day.arrivals:
+                csvWriter.writerow([day.day, day.serviceID, arrival])
+    print 'All scheduled times written to CSV ', csvName
 
 
 # Class that is much saner to use for service range information than a dictionary
@@ -222,4 +252,4 @@ class liveEstimates:
         self.TimeTo2nd = timeto2nd  # the estimated time to the 2nd next bus
 
 
-schVsEst('sample2.dbCSV', 'GTFSScheduledTimesAA060-9', -2)
+schVsEst('sample5', 'GTFSScheduledTimesAA060-9', 2)
