@@ -2,6 +2,7 @@ import datetime
 import csv
 from collections import defaultdict, OrderedDict
 
+# todo: create a logfile to deal with all the console output
 # Split data into as small attributes as possible and find difference between scheduled time and estimate at that time
 def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
 
@@ -94,7 +95,6 @@ def splitIntoAttributes(liveData, liveAttribData):
 
 # need to iterate through the scheduled times in the time for which we have live times
 # return them as a dictionary of a date to its scheduled times
-# todo: it would probably be useful if all these scheduled arrivals ended up in a CSV of their own
 def getScheduledTimes(startDate, endDate, scheduleCSV):
     exclDatesDict = genExclusionDays()
     print "Exclusion dates: ", exclDatesDict
@@ -128,12 +128,9 @@ def getScheduledTimes(startDate, endDate, scheduleCSV):
                 serviceIDTimes.append(arrivalObj)
 
     # Go through every date recorded with its service ID and get the arrival times for that service ID
-    # debug: almost all the dates were still as they should be in serviceIDDates, but are not getting matched
-    # known missing even before ID matching: 17,22,23
     print 'serviceIDDates: ', serviceIDDates
     for date in serviceIDDates:
         for arrivals in serviceIDTimes:
-            #todo: at this point not all the dates are getting matched to a service ID
             if serviceIDDates[date] == arrivals.serviceID:
                 print 'matched ', date, ' to ', arrivals.serviceID
                 allArrivals.append(dailyArrivals(date, serviceIDDates[date], arrivals.arrivals))
@@ -252,4 +249,4 @@ class liveEstimates:
         self.TimeTo2nd = timeto2nd  # the estimated time to the 2nd next bus
 
 
-schVsEst('sample5', 'GTFSScheduledTimesAA060-9', 2)
+schVsEst('sample5', 'GTFSScheduledTimesAA060-9', 0)
