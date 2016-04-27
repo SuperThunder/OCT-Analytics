@@ -128,6 +128,7 @@ def getScheduledTimes(startDate, endDate, scheduleCSV):
                 serviceIDTimes.append(arrivalObj)
 
     # Go through every date recorded with its service ID and get the arrival times for that service ID
+    # todo: find out why april 17,22,23 don't get IDs to be matched here. they're all upper bounds to a date range
     print 'serviceIDDates: ', serviceIDDates
     for date in serviceIDDates:
         for arrivals in serviceIDTimes:
@@ -194,12 +195,16 @@ def matchDateToID(exclDatesDict, tripDates, startDate, endDate):
             serviceIDDates[curDatetimeStr] = exclDatesDict[curDatetimeStr]
         # Otherwise find the regular schedule ID
         else:
-            for dr in tripDates:
+            for dr in tripDates:  # go through all the date ranges of the service IDs
+                oneday = datetime.timedelta(days=1)
+
                 ''' not totally sure how reliably the system will handle dates past the 22nd of april
                 if curDatetime > datetime.datetime.strptime('201604222359', '%Y%m%d%H%M'):
                     print 'Date out of range of old schedule', curDatetime
                 '''
-                if dr.start <= curDatetime <= dr.end:  # Check the date is within the range of the service ID
+                # Without subtracting or adding enough time the program won't match the start/end days to their proper IDs
+                # this is what subtracting/adding oneday is for
+                if dr.start-oneday < curDatetime < dr.end+oneday:  # Check the date is within the range of the service ID
                     #print 'within range for', dr.serviceID, curDatetimeStr
                     if dr.weekdays[curDatetime.weekday()] == '1':  # Then check it is the right day of the week
                         #print 'match for ', dr.serviceID
@@ -248,5 +253,6 @@ class liveEstimates:
         self.TimeToNext = timetonext  # the estimated time to the next bus arrival at StopNum of the RouteNum bus
         self.TimeTo2nd = timeto2nd  # the estimated time to the 2nd next bus
 
-
-schVsEst('sample5', 'GTFSScheduledTimesAA060-9', 0)
+# run instructions: sample live data csv name, source for stoptimes CSV, number of minutes before the scheduled arrival
+# that the estimated times should be checked
+schVsEst('sample5', 'GTFSScheduledTimesAA060-9', 1)
