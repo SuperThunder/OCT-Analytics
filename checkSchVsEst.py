@@ -128,7 +128,11 @@ def getScheduledTimes(startDate, endDate, scheduleCSV):
                 serviceIDTimes.append(arrivalObj)
 
     # Go through every date recorded with its service ID and get the arrival times for that service ID
-    # todo: find out why april 17,22,23 don't get IDs to be matched here. they're all upper bounds to a date range
+    # todo: set up better system for dealing with unneeded IDs than preemptively deleting them all from the
+    # calendar files by hand.
+    # Possible solution: Use the serviceIDs found for the particular stop being analyzed
+    # (from a file like GTFSScheduledTimesAA060-9), and only load the serviceIDs from calendar(_dates).txt
+    # if they match those service IDS.
     print 'serviceIDDates: ', serviceIDDates
     for date in serviceIDDates:
         for arrivals in serviceIDTimes:
@@ -161,7 +165,7 @@ def genExclusionDays():
     return exclDatesDict
 
 
-# Hardcoded for specific busses, won't work with everything
+# Hardcoded for specific busses, won't work with everything as the files have had most of their IDs removed
 def retServiceID_DateRanges():
     with open('./google_transit_combined/calendar.txt', 'rb') as trips:
         calendarCSV = csv.reader(trips)
