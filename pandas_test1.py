@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
-import datetime
-import matplotlib.pylab as plt
+import matplotlib.pyplot as plt
 
 
 # Test ability of pandas to parse time series data
@@ -13,4 +12,4 @@ def pdt1(csvSource):
 
 
 
-pdt1("sample2.dbCSV")
+pdt1("sample5CSV")

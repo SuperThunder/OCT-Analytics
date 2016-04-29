@@ -64,15 +64,17 @@ def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
         for day in scheduledTimes:
             for arrival in day.arrivals:
                 arrivalTime = datetime.datetime.strptime(day.day+arrival, '%Y%m%d%H%M%S')
-                arrivalTime += datetime.timedelta(minutes=-1*minsBeforeArrival)
+                arrivalTimeAdj = arrivalTime + datetime.timedelta(minutes=-1*minsBeforeArrival)
                 for timeEst in liveTimes:
-                    if datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y') == arrivalTime:
+                    if datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y') == arrivalTimeAdj:
                         print timeEst.PollTime, timeEst.TimeToNext
+                        discrepancyTD = arrivalTime - timeEst
+                        discrepancy = discrepancyTD.minute
                         timeObj = datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y')
                         row = [timeEst.StopNum, timeEst.RouteNum, timeObj.year, monthNames[timeObj.month],
                                timeObj.month, timeObj.isoweekday(), timeObj.day, timeObj.hour, timeObj.minute,
                                timeObj.second, timeEst.TimeToNext, timeEst.TimeTo2nd, timeEst.PollTime,
-                               arrival]
+                               arrival, discrepancy]
                         csvDiscrWriter.writerow(row)
         print 'done'
 
