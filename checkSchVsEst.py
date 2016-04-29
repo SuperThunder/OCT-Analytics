@@ -71,10 +71,11 @@ def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
                         print timeEst.PollTime, timeEst.TimeToNext
                         discrepancy = ''
                         # Calculate the discrepancy from when the scheduled arrival and the estimate
+                        # If the estimate is an error code (-50, -100) leave it blank
                         if int(timeEst.TimeToNext) > 0:
                             discrepancyTD = (estPollTime+datetime.timedelta(minutes=int(timeEst.TimeToNext))) - arrivalTime
                             discrepancy = discrepancyTD.seconds/60
-                        print 'Discrepancy: ', discrepancyTD
+                        print 'Discrepancy: ', discrepancy
                         timeObj = datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y')
                         row = [timeEst.StopNum, timeEst.RouteNum, timeObj.year, monthNames[timeObj.month],
                                timeObj.month, timeObj.isoweekday(), timeObj.day, timeObj.hour, timeObj.minute,
@@ -266,4 +267,4 @@ class liveEstimates:
 
 # run instructions: sample live data csv name, source for stoptimes CSV, number of minutes before the scheduled arrival
 # that the estimated times should be checked
-schVsEst('sample5', 'GTFSScheduledTimesAA060-9', 0)
+schVsEst('sample5', 'GTFSScheduledTimesAA060-9', -2)
