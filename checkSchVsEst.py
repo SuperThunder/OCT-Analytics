@@ -6,7 +6,7 @@ from collections import defaultdict, OrderedDict
 # Split data into as small attributes as possible and find difference between scheduled time and estimate at that time
 def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
 
-    attribFileName = 'Attributes of '+liveCSV+'.csv'
+    attribFileName = liveCSV+' Attributes'+'.csv'
     # Split poll times of live data into specific attributes
     with open(liveCSV+'CSV.csv', 'rb') as liveData:
             with open(attribFileName, 'wb') as attribs:
@@ -43,13 +43,13 @@ def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
 
     liveTimes = []
     # Find the discrepancy of scheduled and live times
-    with open('Attributes of '+liveCSV+'.csv', 'rb') as attribs:
+    with open(attribFileName, 'rb') as attribs:
         csvAttribReader = csv.reader(attribs)
         next(csvAttribReader, None)
         for row in csvAttribReader:
             liveTimes.append(liveEstimates(stopnum=row[0], routenum=row[1], polltime=row[12],
                                            timetonext=row[10], timeto2nd=row[11]))
-    with open('Attributes and Time Discrepencies'+liveCSV+'t-'+str(minsBeforeArrival)+'mins.csv', 'wb') as discr:
+    with open(liveCSV+' Attributes and Time Discrepencies '+'t-'+str(minsBeforeArrival)+'mins.csv', 'wb') as discr:
         csvDiscrWriter = csv.writer(discr)
         csvDiscrWriter.writerow(['StopNum', 'RouteNum', 'PollTimeYear', 'PollTimeMonth', 'PollTimeMonthNum',
                          'PollTimeWeekday', 'PollTimeDay', 'PollTimeHour', 'PollTimeMinute', 'PollTimeSecond',
@@ -66,10 +66,15 @@ def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
                 arrivalTime = datetime.datetime.strptime(day.day+arrival, '%Y%m%d%H%M%S')
                 arrivalTimeAdj = arrivalTime + datetime.timedelta(minutes=-1*minsBeforeArrival)
                 for timeEst in liveTimes:
-                    if datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y') == arrivalTimeAdj:
+                    estPollTime = datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y')
+                    if estPollTime == arrivalTimeAdj:
                         print timeEst.PollTime, timeEst.TimeToNext
-                        discrepancyTD = arrivalTime - timeEst
-                        discrepancy = discrepancyTD.minute
+                        discrepancy = ''
+                        # Calculate the discrepancy from when the scheduled arrival and the estimate
+                        if int(timeEst.TimeToNext) > 0:
+                            discrepancyTD = (estPollTime+datetime.timedelta(minutes=int(timeEst.TimeToNext))) - arrivalTime
+                            discrepancy = discrepancyTD.seconds/60
+                        print 'Discrepancy: ', discrepancyTD
                         timeObj = datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y')
                         row = [timeEst.StopNum, timeEst.RouteNum, timeObj.year, monthNames[timeObj.month],
                                timeObj.month, timeObj.isoweekday(), timeObj.day, timeObj.hour, timeObj.minute,
@@ -261,4 +266,4 @@ class liveEstimates:
 
 # run instructions: sample live data csv name, source for stoptimes CSV, number of minutes before the scheduled arrival
 # that the estimated times should be checked
-schVsEst('sample5', 'GTFSScheduledTimesAA060-9', 1)
+schVsEst('sample5', 'GTFSScheduledTimesAA060-9', 0)
