@@ -66,10 +66,10 @@ def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
 
         print 'matching scheduled times to estimates'
         for day in scheduledTimes:
+            print 'Matching times for ', day.day, ' at ', minsBeforeArrival, ' minutes before the scheduled stop time'
             for arrival in day.arrivals:
                 arrivalTime = datetime.datetime.strptime(day.day+arrival, '%Y%m%d%H%M%S')
                 dateStr = datetime.datetime.strftime(arrivalTime, '%Y%m%d')
-                print 'Matching times for ', dateStr
                 arrivalTimeAdj = arrivalTime + datetime.timedelta(minutes=-1*minsBeforeArrival)
                 for timeEst in liveTimes[dateStr]:
                     estPollTime = datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y')
