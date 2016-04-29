@@ -47,6 +47,7 @@ def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
         csvAttribReader = csv.reader(attribs)
         next(csvAttribReader, None)
         for row in csvAttribReader:
+            # TODO: turn liveTimes into an ordered dict with the day as the key
             liveTimes.append(liveEstimates(stopnum=row[0], routenum=row[1], polltime=row[12],
                                            timetonext=row[10], timeto2nd=row[11]))
     with open(liveCSV+' Attributes and Time Discrepencies '+'t-'+str(minsBeforeArrival)+'mins.csv', 'wb') as discr:
@@ -75,6 +76,10 @@ def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
                         if int(timeEst.TimeToNext) > 0:
                             discrepancyTD = (estPollTime+datetime.timedelta(minutes=int(timeEst.TimeToNext))) - arrivalTime
                             discrepancy = discrepancyTD.seconds/60
+                            # deal with case in which bus is early, where above code will loop around to 1440 - minutes
+                            if discrepancy > 100:
+                                discrepancy = discrepancy - 1440
+
                         print 'Discrepancy: ', discrepancy
                         timeObj = datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y')
                         row = [timeEst.StopNum, timeEst.RouteNum, timeObj.year, monthNames[timeObj.month],
@@ -174,21 +179,17 @@ def genExclusionDays():
 
 
 # Hardcoded for specific busses, won't work with everything as the files have had most of their IDs removed
+# Otherwise we would have to somehow know the service ID of our trip in advance
 def retServiceID_DateRanges():
     with open('./google_transit_combined/calendar.txt', 'rb') as trips:
         calendarCSV = csv.reader(trips)
         calendarRanges = []
         next(calendarCSV, None)  # skip header
-        # luckily only need first 6 rows of data for the 9 schedule. this is the hardcoded part.
-        # Otherwise we would have to somehow know the service ID of our trip in advance
-        #i = 0
         for row in calendarCSV:
-            #if i < 6:
             daterange = serviceIDDateRange(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7],
                                                datetime.datetime.strptime(row[8], '%Y%m%d'),
                                                datetime.datetime.strptime(row[9], '%Y%m%d'))
             calendarRanges.append(daterange)
-            #i += 1
 
     return calendarRanges
 
