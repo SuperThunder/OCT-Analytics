@@ -267,4 +267,4 @@ class liveEstimates:
 
 # run instructions: sample live data csv name, source for stoptimes CSV, number of minutes before the scheduled arrival
 # that the estimated times should be checked
-schVsEst('sample5', 'GTFSScheduledTimesAA060-9', -2)
+#schVsEst('sample5', 'GTFSScheduledTimesAA060-9', -2)

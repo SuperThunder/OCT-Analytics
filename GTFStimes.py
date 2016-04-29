@@ -49,5 +49,3 @@ def splitTripID(tripID):
 
     return trip, serviceID
 
-
-getStopSchInfo('./google_transit_combined/stop_times.txt', 'AA060', '9')
