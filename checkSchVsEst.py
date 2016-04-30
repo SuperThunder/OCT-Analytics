@@ -75,7 +75,6 @@ def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
                     estPollTime = datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y')
                     if estPollTime == arrivalTimeAdj:
                         #print timeEst.PollTime, timeEst.TimeToNext
-                        discrepancy = ''
                         # Calculate the discrepancy from when the scheduled arrival and the estimate
                         # If the estimate is an error code (-50, -100) leave it blank
                         if int(timeEst.TimeToNext) > 0:
@@ -84,6 +83,8 @@ def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
                             # deal with case in which bus is early, where above code will loop around to 1440 - minutes
                             if discrepancy > 100:
                                 discrepancy = discrepancy - 1440
+                        else:
+                            discrepancy = int(timeEst.TimeToNext) # carry over the error value. Turns out empty strings don't like to be converted to int or float
 
                         #print 'Discrepancy: ', discrepancy
                         timeObj = datetime.datetime.strptime(timeEst.PollTime, '%a %b %d %H:%M:%S %Y')
