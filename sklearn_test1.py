@@ -37,17 +37,17 @@ Xm = np.matrix(X)
 print Xm
 #XmA =  Xm.A.reshape(1101,3)
 XmA = Xm.A.reshape(len(data['Discrepancy']), 2)
-print 'xma 1000', XmA[800]
+print 'xma', XmA[700]
 
 
 #X = np.array(data['TimeToNext'])
 
 
-classifier = svm.SVC(gamma=0.001, C=100.)  # create an 'estimator instance'
+classifier = svm.SVC(gamma=0.001, C=100., verbose=False)  # create an 'estimator instance'
 classifier.fit(X=XmA, y=data['Discrepancy'])
 print classifier
 print classifier.predict(XmA)
-print classifier.predict([7, 10])
+print classifier.predict([3, 10])
 
 
 '''
