@@ -8,7 +8,7 @@ def writeresults(clfname, clf):
         destwriter.writerow(['Weekday', 'Hour', 'Predicted Discrepancy'])
         for weekday in range(1, 7+1):
             for hour in range(6, 23+1):
-                destwriter.writerow([weekday, hour, clf.predict([weekday, hour])[0]])
+                destwriter.writerow([weekday, hour, int(clf.predict([weekday, hour])[0])])
             destwriter.writerow(['', '', ''])
 
 SAMPLE_NAME = 'sample5 Attributes and Time Discrepencies t-1mins'
@@ -32,15 +32,19 @@ print 'Input len ', len(input)
 print 'Output len ', len(output)
 
 # http://scikit-learn.org/stable/modules/svm.html
+ninput = np.matrix(input)
+#ninput.reshape(1, -1)
+noutput = np.array(output)
+noutput.reshape(-1, 1)
+print ninput.shape
+print noutput.shape
 clf = svm.SVC()
-clf.fit(X=input, y=output)
-print np.array(input).shape
-print np.array(output).shape
+clf.fit(X=ninput, y=noutput)
 print 'Writing SVM results'
 writeresults('SVM Predictions', clf)
 
 regclf = svm.SVR()
-regclf.fit(X=input, y=output)
+regclf.fit(X=ninput, y=noutput)
 print 'Writing SVR results'
 writeresults('SVR Predictions', regclf)
 
