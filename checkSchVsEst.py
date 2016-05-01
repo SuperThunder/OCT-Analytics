@@ -15,7 +15,6 @@ def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
                 headerRow = ['StopNum', 'RouteNum', 'PollTimeYear', 'PollTimeMonth', 'PollTimeMonthNum',
                              'PollTimeWeekday', 'PollTimeDay', 'PollTimeHour', 'PollTimeMinute', 'PollTimeSecond',
                              'TimeToNext', 'TimeTo2nd', 'FullPollTime']
-                # 'GTFSServiceID', 'SchTime', 'TimeDiff']
                 csvAttribWriter.writerow(headerRow)
                 splitIntoAttributes(csvLiveReader, csvAttribWriter)
 
