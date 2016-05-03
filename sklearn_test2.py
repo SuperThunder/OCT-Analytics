@@ -35,7 +35,7 @@ print 'Output len ', len(output)
 
 # http://scikit-learn.org/stable/modules/svm.html
 ninput = np.matrix(input)
-#ninput.reshape(1, -1)
+ninput.reshape(1, -1)
 noutput = np.array(output)
 noutput.reshape(-1, 1)
 print ninput.shape
@@ -53,7 +53,9 @@ print 'Writing SVR results'
 writeresults('SVR Predictions', regclf)
 
 # Everything below here gives ridiculous results
+
 # note fairly low nu value, 0.01 is highest that works for sample5
+# see http://stackoverflow.com/questions/11230955/what-is-the-meaning-of-the-nu-parameter-in-scikit-learns-svm-class
 # this one gives riduculously high values
 nuclf = svm.NuSVC(nu=0.001)
 nuclf.fit(X=ninput, y=noutput)
@@ -78,9 +80,4 @@ linclf.fit(X=ninput, y=noutput)
 print 'Writing Linear SVR Results'
 writeresults('LinearSVR Predictions', linclf)
 
-'''
-data = np.genfromtxt(fname=src, names=True, delimiter=',', missing_values=['-100', '-50', ''],
-                         filling_values=None, usecols=colstouse, skip_header=0, dtype=int,
-                         unpack=True, usemask=True)
-'''
 
