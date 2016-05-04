@@ -9,8 +9,10 @@ def writeresults(clfname, clf):
         destwriter.writerow(['Weekday', 'Hour', 'Predicted Discrepancy'])
         for weekday in range(1, 7+1):
             for hour in range(6, 23+1):
-                print 'predicting', weekday, hour
-                param = [weekday, hour]
+                #print 'predicting', weekday, hour
+                # What is being done here is converting the parameters to predict to a 1d array and then reshaping
+                # That array so that sklearn doesn't throw a warning
+                param = np.ravel([weekday, hour]).reshape(1, -1)
                 clfpdct = clf.predict(param)
                 prediction = float(clfpdct[0])
                 destwriter.writerow([weekday, hour, '%.2f'%prediction])
@@ -38,8 +40,8 @@ print 'Input len ', len(input)
 print 'Output len ', len(output)
 
 # http://scikit-learn.org/stable/modules/svm.html
+# Note reshaping to input and output to fit sklearn convention
 ninput = np.matrix(input)
-#ninput.reshape(1, -1)
 noutput = np.ravel(pd.DataFrame(output))
 print ninput
 print 'output', noutput
