@@ -5,6 +5,7 @@ FILE_NAME = 'sample5CSV.csv'
 with open(FILE_NAME, 'rb') as sample:
     data = pd.read_csv(sample, parse_dates=True, na_values=['-50','-100'])
     indexes =  list(range(len(data)))
+    # Can potentially add a color spectrum to this
     plt.plot(indexes, data['TimeToNext'], linestyle='None', marker='o', color='g')
     plt.xlabel('Index')
     plt.ylabel('TimeToNext')
