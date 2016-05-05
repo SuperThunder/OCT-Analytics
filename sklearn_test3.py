@@ -39,6 +39,12 @@ for row in data:
 print 'Input len ', len(input)
 print 'Output len ', len(output)
 
+'''
+Should attempt this
+Proper choice of C and gamma is critical to the SVM's performance.
+One is advised to use sklearn.grid_search.GridSearchCV with C and gamma spaced exponentially far apart to choose good values.
+'''
+
 # http://scikit-learn.org/stable/modules/svm.html
 # Note reshaping to input and output to fit sklearn convention
 ninput = np.matrix(input)
