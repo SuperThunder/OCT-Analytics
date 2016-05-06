@@ -65,8 +65,8 @@ def genpredictions(SAMPLE_NAME):
     print 'Writing SVR results'
     writeresults('SVR Predictions', regclf, SAMPLE_NAME)
 
-    # Everything below here gives ridiculous results
-
+    # Everything below here gives ridiculous results, not really useful even for testing
+'''
     # note fairly low nu value, 0.01 is highest that works for sample5
     # see http://stackoverflow.com/questions/11230955/what-is-the-meaning-of-the-nu-parameter-in-scikit-learns-svm-class
     # this one gives riduculously high values
@@ -92,5 +92,6 @@ def genpredictions(SAMPLE_NAME):
     linclf.fit(X=ninput, y=noutput)
     print 'Writing Linear SVR Results'
     writeresults('LinearSVR Predictions', linclf, SAMPLE_NAME)
+'''
 
 

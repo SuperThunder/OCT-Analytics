@@ -19,7 +19,7 @@ def plotlines(FILE_NAME, xlabel, ylabel, title, key):
         data = pd.read_csv(sample, parse_dates=True, na_values=['-50','-100'])
         indexes = list(range(len(data)))  # Create a list of the indexes to use to graph the time series
         # Can potentially add a color spectrum to this
-        plt.plot(indexes, data[key], marker='o', color='g', markeredgecolor='None', linewidth = 5)
+        plt.plot(indexes, data[key], marker='o', color='g', markeredgecolor='None', linewidth = 1)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
         plt.title(title)
