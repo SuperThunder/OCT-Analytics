@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 
+
 def plotpoints(FILE_NAME, xlabel, ylabel, title, key):
     with open(FILE_NAME, 'rb') as sample:
         data = pd.read_csv(sample, parse_dates=True, na_values=['-50','-100'])
@@ -11,6 +12,7 @@ def plotpoints(FILE_NAME, xlabel, ylabel, title, key):
         plt.ylabel(ylabel)
         plt.title(title)
         plt.show()
+
 
 def plotlines(FILE_NAME, xlabel, ylabel, title, key):
     with open(FILE_NAME, 'rb') as sample:
