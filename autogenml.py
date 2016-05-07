@@ -6,8 +6,12 @@ import pandastest2
 sklearn_test3.genpredictions('sample5 Attributes and Time Discrepencies t-0mins')
 sklearn_test3.genpredictions('sample5 Attributes and Time Discrepencies t-1mins')
 sklearn_test3.genpredictions('sample5 Attributes and Time Discrepencies t-2mins')
+
 pandastest2.plotpoints('sample5CSV', 'Index', 'TimeToNext', 'Index vs TimeToNext', 'TimeToNext')
+pandastest2.plotlines('./Machine learning results/SVR Predictions for sample5 Attributes and Time Discrepencies t-2mins',
+    'Index', 'Expected Discrepancy', 'Predicted Discrepancy vs Weekdays at 2 minutes before Scheduled Arrival',
+    'Predicted Discrepancy')
 pandastest2.plotlines('./Machine learning results/SVR Predictions for sample5 Attributes and Time Discrepencies t-1mins',
-          'Index', 'Expected Discrepancy', 'Predicted Discrepancy vs Weekdays', 'Predicted Discrepancy')
+          'Index', 'Expected Discrepancy', 'Predicted Discrepancy vs Weekdays at 1 minute before Scheduled Arrival', 'Predicted Discrepancy')
 pandastest2.plotlines('./Machine learning results/SVR Predictions for sample5 Attributes and Time Discrepencies t-0mins',
-    'Index', 'Expected Discrepancy', 'Predicted Discrepancy vs Weekdays', 'Predicted Discrepancy')
+    'Index', 'Expected Discrepancy', 'Predicted Discrepancy vs Weekdays at Scheduled Arrival Time', 'Predicted Discrepancy')
