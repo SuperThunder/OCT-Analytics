@@ -32,7 +32,7 @@ def genpredictions(SAMPLE_NAME):
     input = []
     output = []
     for row in data:
-        if row[2] > -49:
+        if row[2] > -49: # Get the potential negative discrepancies while ignoring error codes
             input.append([row[0], row[1]])
             output.append(row[2])
 

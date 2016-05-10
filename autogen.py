@@ -5,12 +5,12 @@ import toCSV
 import GTFStimes
 import checkSchVsEst
 
-SAMPLE_NAME = 'sample5'
+SAMPLE_NAME = 'currentsample'
 
 toCSV.toCSV(SAMPLE_NAME)
 GTFStimes.getStopSchInfo('./google_transit_combined/stop_times.txt', 'AA060', '9')
 # generate the estimated time discrepancy for up to 5 minutes before a schedule stop
 for i in range(0, 6):
-    checkSchVsEst.schVsEst('sample5', 'GTFSScheduledTimesAA060-9', i)
+    checkSchVsEst.schVsEst(SAMPLE_NAME, 'GTFSScheduledTimesAA060-9', i)
 
 
