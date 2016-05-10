@@ -1,5 +1,6 @@
 # Automate the generation of the files wanted for analysis by running their scripts
 # Note that this can take some time, especially for the schedule vs estimate stage
+# todo: combine the latest sample database with the legacy data for a wider data range
 import toCSV
 import GTFStimes
 import checkSchVsEst
