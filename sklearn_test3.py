@@ -32,7 +32,7 @@ def genpredictions(SAMPLE_NAME):
     input = []
     output = []
     for row in data:
-        if row[2] > 0:
+        if row[2] > -49:
             input.append([row[0], row[1]])
             output.append(row[2])
 
