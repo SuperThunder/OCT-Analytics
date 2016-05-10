@@ -24,3 +24,7 @@ def plotlines(FILE_NAME, xlabel, ylabel, title, key):
         plt.ylabel(ylabel)
         plt.title(title)
         plt.show()
+
+# file names given in an array
+def multiplotlines(FILE_NAMES, xlabel, ylabel, title, key):
+    plt.show()
