@@ -14,6 +14,17 @@ pandastest2.plotpoints('currentsampleCSV', 'Index', 'TimeToNext', 'Index vs Time
 pandastest2.plotpoints('currentsample Attributes and Time Discrepencies t-4mins', 'Index', 'Discrepancy',
                        'Discrepancy vs Index', 'Discrepancy')
 '''
+FILE_NAMES = [
+    #'./Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-5mins',
+    './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-4mins',
+    './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-3mins',
+    './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-2mins',
+    './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-1mins',
+    './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-0mins'
+    ]
+pandastest2.multiplotlines(FILE_NAMES, 'Index', 'Expected Discrepancy',
+                      'Predicted Discrepancy vs Weekdays at Scheduled Arrival Time', 'Predicted Discrepancy')
+'''
 pandastest2.plotlines('./Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-4mins',
     'Index', 'Expected Discrepancy', 'Predicted Discrepancy vs Weekdays at Scheduled Arrival Time', 'Predicted Discrepancy')
 pandastest2.plotlines('./Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-3mins',
@@ -25,3 +36,4 @@ pandastest2.plotlines('./Machine learning results/SVR Predictions for currentsam
           'Index', 'Expected Discrepancy', 'Predicted Discrepancy vs Weekdays at 1 minute before Scheduled Arrival', 'Predicted Discrepancy')
 pandastest2.plotlines('./Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-0mins',
     'Index', 'Expected Discrepancy', 'Predicted Discrepancy vs Weekdays at Scheduled Arrival Time', 'Predicted Discrepancy')
+'''
