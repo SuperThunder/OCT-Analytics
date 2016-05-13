@@ -28,34 +28,5 @@ for i in range (0, 6):
     FILE_NAMES.append(name)
     FILE_LABELS.append(label)
 
-
-'''
-FILE_NAMES = [
-    './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-5mins',
-    './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-4mins',
-    './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-3mins',
-    './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-2mins',
-    './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-1mins',
-    './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-0mins'
-    ]
-'''
-
-'''
-FILE_LABELS = ['t-5', 't-4', 't-3', 't-2', 't-1', 't-0']
-'''
 pandastest2.multiplotlines(FILE_NAMES, FILE_LABELS, 'Index', 'SVR Predicted Discrepancy',
                       'Predicted Discrepancy vs Weekdays at Scheduled Arrival Time', 'Predicted Discrepancy')
-
-'''
-pandastest2.plotlines('./Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-4mins',
-    'Index', 'SVR Predicted Discrepancy', 'Predicted Discrepancy vs Weekdays at Scheduled Arrival Time', 'Predicted Discrepancy')
-pandastest2.plotlines('./Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-3mins',
-    'Index', 'SVR Predicted Discrepancy', 'Predicted Discrepancy vs Weekdays at Scheduled Arrival Time', 'Predicted Discrepancy')
-pandastest2.plotlines('./Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-2mins',
-    'Index', 'SVR Predicted Discrepancy', 'Predicted Discrepancy vs Weekdays at 2 minutes before Scheduled Arrival',
-    'Predicted Discrepancy')
-pandastest2.plotlines('./Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-1mins',
-          'Index', 'SVR Predicted Discrepancy', 'Predicted Discrepancy vs Weekdays at 1 minute before Scheduled Arrival', 'Predicted Discrepancy')
-pandastest2.plotlines('./Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-0mins',
-    'Index', 'SVR Predicted Discrepancy', 'Predicted Discrepancy vs Weekdays at Scheduled Arrival Time', 'Predicted Discrepancy')
-'''
