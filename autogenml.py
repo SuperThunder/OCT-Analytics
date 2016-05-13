@@ -3,17 +3,32 @@
 import sklearn_test3
 import pandastest2
 
+for i in range(0, 6):
+    sklearn_test3.genpredictions('currentsample Attributes and Time Discrepencies t-%dmins'%i)
+
+''' # What was I even doing here repeating this without a loop
 sklearn_test3.genpredictions('currentsample Attributes and Time Discrepencies t-0mins')
 sklearn_test3.genpredictions('currentsample Attributes and Time Discrepencies t-1mins')
 sklearn_test3.genpredictions('currentsample Attributes and Time Discrepencies t-2mins')
 sklearn_test3.genpredictions('currentsample Attributes and Time Discrepencies t-3mins')
 sklearn_test3.genpredictions('currentsample Attributes and Time Discrepencies t-4mins')
 sklearn_test3.genpredictions('currentsample Attributes and Time Discrepencies t-5mins')
+'''
 
 pandastest2.plotpoints('currentsampleCSV', 'Index', 'TimeToNext', 'Index vs TimeToNext Values', 'TimeToNext')
 ''' # This shows the sort of random spread of discrepancies (although concentrated around 0)
 pandastest2.plotpoints('currentsample Attributes and Time Discrepencies t-4mins', 'Index', 'Discrepancy',
                        'Discrepancy vs Index', 'Discrepancy')
+'''
+FILE_NAMES = []
+FILE_LABELS = []
+for i in range (0, 6):
+    name = './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-%dmins'%i
+    label = 't-%d'%i
+    FILE_NAMES.append(name)
+    FILE_LABELS.append(label)
+
+
 '''
 FILE_NAMES = [
     './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-5mins',
@@ -23,9 +38,14 @@ FILE_NAMES = [
     './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-1mins',
     './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-0mins'
     ]
+'''
+
+'''
 FILE_LABELS = ['t-5', 't-4', 't-3', 't-2', 't-1', 't-0']
+'''
 pandastest2.multiplotlines(FILE_NAMES, FILE_LABELS, 'Index', 'SVR Predicted Discrepancy',
                       'Predicted Discrepancy vs Weekdays at Scheduled Arrival Time', 'Predicted Discrepancy')
+
 '''
 pandastest2.plotlines('./Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-4mins',
     'Index', 'SVR Predicted Discrepancy', 'Predicted Discrepancy vs Weekdays at Scheduled Arrival Time', 'Predicted Discrepancy')
