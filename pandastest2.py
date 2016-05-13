@@ -64,8 +64,14 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, key):
         file = open(name+'.csv', 'rb')
         data = pd.read_csv(file, parse_dates=True, na_values=['-50','-100'])
         indexes = list(range(len(data)))
-        datetimes = data['Datetime']
-        plt.plot(indexes, data[key], marker='o', color=colors[index], markeredgecolor='None', linewidth = 1,
+        datetimes = []
+        for dt in data['Datetime']:
+            print dt
+            if dt != '':
+                datetimes.append(pd.datetime.strptime(str(dt), '%w %H'))  # 0 6:00
+        print datetimes
+
+        plt.plot(datetimes, data[key], marker='o', color=colors[index], markeredgecolor='None', linewidth = 1,
                  label=FILE_LABELS[index])
         index += 1
         #datasets.append(plotdata

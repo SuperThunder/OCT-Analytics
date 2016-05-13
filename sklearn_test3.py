@@ -15,7 +15,7 @@ def writeresults(clfname, clf, sname):
                 param = np.ravel([weekday, hour]).reshape(1, -1)
                 clfpdct = clf.predict(param)
                 prediction = float(clfpdct[0])
-                dtstr = str(weekday-1)+' '+str(hour)+':00' # create the string later parseable as a datetime
+                dtstr = str(weekday-1)+' '+str(hour) # create the string later parseable as a datetime
                 destwriter.writerow([weekday, hour, '%.2f'%prediction, dtstr])
             destwriter.writerow(['', '', ''])
 
