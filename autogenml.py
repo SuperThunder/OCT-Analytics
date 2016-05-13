@@ -11,13 +11,24 @@ pandastest2.plotpoints('currentsampleCSV', 'Index', 'TimeToNext', 'Index vs Time
 pandastest2.plotpoints('currentsample Attributes and Time Discrepencies t-4mins', 'Index', 'Discrepancy',
                        'Discrepancy vs Index', 'Discrepancy')
 '''
-FILE_NAMES = []
-FILE_LABELS = []
+SVR_FILE_NAMES = []
+SVR_FILE_LABELS = []
 for i in range(0, 6):
     name = './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-%dmins'%i
     label = 't-%d'%i
-    FILE_NAMES.append(name)
-    FILE_LABELS.append(label)
+    SVR_FILE_NAMES.append(name)
+    SVR_FILE_LABELS.append(label)
 
-pandastest2.multiplotlines(FILE_NAMES, FILE_LABELS, 'Index', 'SVR Predicted Discrepancy',
-                      'Predicted Discrepancy vs Weekdays at Scheduled Arrival Time', 'Predicted Discrepancy')
+pandastest2.multiplotlines(SVR_FILE_NAMES, SVR_FILE_LABELS, 'Index', 'SVR Predicted Discrepancy',
+                      'SVR Predicted Discrepancy vs Weekdays at Scheduled Arrival Time', 'Predicted Discrepancy')
+
+SVC_FILE_NAMES = []
+SVC_FILE_LABELS = []
+for i in range(0, 6):
+    name = './Machine learning results/SVM Predictions for currentsample Attributes and Time Discrepencies t-%dmins'%i
+    label = 't-%d'%i
+    SVC_FILE_NAMES.append(name)
+    SVC_FILE_LABELS.append(label)
+
+pandastest2.multiplotlines(SVC_FILE_NAMES, SVC_FILE_LABELS, 'Index', 'SVC Predicted Discrepancy',
+                      'SVC Predicted Discrepancy vs Weekdays at Scheduled Arrival Time', 'Predicted Discrepancy')

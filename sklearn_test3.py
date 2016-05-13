@@ -57,8 +57,8 @@ def genpredictions(SAMPLE_NAME):
     # The normal SVC and SVR give fairly reasonable results, SVR being better
     clf = svm.SVC()
     clf.fit(X=ninput, y=noutput)
-    print 'Writing SVM results'
-    writeresults('SVM Predictions', clf, SAMPLE_NAME)
+    print 'Writing SVC results'
+    writeresults('SVC Predictions', clf, SAMPLE_NAME)
 
     regclf = svm.SVR()
     regclf.fit(X=ninput, y=noutput)

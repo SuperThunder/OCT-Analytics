@@ -46,7 +46,7 @@ def multiplotlines(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, key):
         #datasets.append(plotdata
     # The subplot adjusting
     plt.subplots_adjust(left=0.03, right = 0.99, bottom = 0.05, top = 0.97)
-    plt.legend()
+    plt.legend(title='Number of minutes before scheduled \narrival discrepancy was measured at')
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
     plt.title(title)
