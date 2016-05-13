@@ -6,7 +6,7 @@ import csv
 def writeresults(clfname, clf, sname):
     with open('./Machine learning results/'+clfname+' for '+sname+'.csv', 'wb') as dest:
         destwriter = csv.writer(dest)
-        destwriter.writerow(['Weekday', 'Hour', 'Predicted Discrepancy'])
+        destwriter.writerow(['Weekday', 'Hour', 'Predicted Discrepancy', 'Datetime'])
         for weekday in range(1, 7+1):
             for hour in range(6, 23+1):
                 #print 'predicting', weekday, hour
@@ -15,7 +15,8 @@ def writeresults(clfname, clf, sname):
                 param = np.ravel([weekday, hour]).reshape(1, -1)
                 clfpdct = clf.predict(param)
                 prediction = float(clfpdct[0])
-                destwriter.writerow([weekday, hour, '%.2f'%prediction])
+                dtstr = str(weekday-1)+' '+str(hour)+':00' # create the string later parseable as a datetime
+                destwriter.writerow([weekday, hour, '%.2f'%prediction, dtstr])
             destwriter.writerow(['', '', ''])
 
 def genpredictions(SAMPLE_NAME):
