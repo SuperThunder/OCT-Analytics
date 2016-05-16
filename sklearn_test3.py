@@ -4,6 +4,7 @@ import pandas as pd
 import csv
 
 def writeresults(clfname, clf, sname):
+    weekdays = {0: 'Monday', 1: 'Tuesday', 2: 'Wednesday', 3: 'Thursday', 4: 'Friday', 5: 'Saturday', 6: 'Sunday'}
     with open('./Machine learning results/'+clfname+' for '+sname+'.csv', 'wb') as dest:
         destwriter = csv.writer(dest)
         destwriter.writerow(['Weekday', 'Hour', 'Predicted Discrepancy', 'Datetime'])
@@ -15,7 +16,7 @@ def writeresults(clfname, clf, sname):
                 param = np.ravel([weekday, hour]).reshape(1, -1)
                 clfpdct = clf.predict(param)
                 prediction = float(clfpdct[0])
-                dtstr = str(weekday-1)+' '+str(hour) # create the string later parseable as a datetime
+                dtstr = weekdays[weekday-1]+' '+str(hour) # create the string later parseable as a datetime
                 destwriter.writerow([weekday, hour, '%.2f'%prediction, dtstr])
             destwriter.writerow(['', '', ''])
 
