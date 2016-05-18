@@ -70,7 +70,7 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
         # Want to make a t-_ list of the classes of daily lists of predicted discrepancies
         # so for every file (make a list of these as a list of datafile classes)
         # Then in each of those datafile classes have a weekdaydata class that will contain 23 predicted discrepancies
-        # Graphing will then be done Day->Different line for each t-_
+        # Graphing will then be done Day(subplot for mo-su)->each t-_ line data set graphed by x=1-23 y=prd dcr
         filedays[fileindex].append([])
 
 
