@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mpldt
 import pandas as pd
 from collections import defaultdict
+from math import isnan
 
 # todo: make plots sorted and labelled by proper datetime
 # http://matplotlib.org/api/pyplot_api.html#matplotlib.pyplot.plot_date
@@ -63,17 +64,34 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
     # todo: make some kind of color system so more than 7 plots can be displayed
     colors = ['g', 'r', 'c', 'm', 'y', 'b', 'k']
     fileindex = 0
-    filedays = []
+    filedays = [] # this is a list of datafile classes
     for name in FILE_NAMES:
-        file = open(name + '.csv', 'rb')
-        data = pd.read_csv(file, parse_dates=True, na_values=['-50', '-100', ''])
+        datasrc = open(name + '.csv', 'rb')
+        data = pd.read_csv(datasrc, parse_dates=True, na_values=['-50', '-100', ''])
         # Want to make a t-_ list of the classes of daily lists of predicted discrepancies
         # so for every file (make a list of these as a list of datafile classes)
         # Then in each of those datafile classes have a weekdaydata class that will contain 23 predicted discrepancies
         # Graphing will then be done Day(subplot for mo-su)->each t-_ line data set graphed by x=1-23 y=prd dcr
-        filedays[fileindex].append([])
+        index = 0
+        predictions = []
+        currentpredictions = []
+        weekdaydict = defaultdict(list)
+        for prd in data['Predicted Discrepancy']:
+            if not isnan(prd):
+                currentpredictions.append(prd)
+                #print prd
+            else:
+                predictions.append(currentpredictions)
+                #print currentpredictions
+                currentpredictions = []
+        #print len(predictions)
+        weekdata = weekdaydata(predictions)
+        fileday = datafile(FILE_LABELS[fileindex], weekdata)
+        filedays.append(fileday)
 
+        fileindex += 1
 
+    print filedays
 
 class datafile:
     def __init__(self, label, data): # data here is a weekdaydata class
@@ -81,14 +99,14 @@ class datafile:
         self.data = data
 
 class weekdaydata:
-    def __init__(self, mo, tu, we, th, fr, sa, su):
-        self.mon = mo
-        self.tue = tu
-        self.wed = we
-        self.thu = th
-        self.fri = fr
-        self.sat = sa
-        self.sun = su
+    def __init__(self, montosun):
+        self.mon = montosun[0]
+        self.tue = montosun[1]
+        self.wed = montosun[2]
+        self.thu = montosun[3]
+        self.fri = montosun[4]
+        self.sat = montosun[5]
+        self.sun = montosun[6]
 
 
 class plotdata:
