@@ -94,10 +94,12 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
     fig, (mo, tu, we, th, fr, sa, su) = plt.subplots(7, sharex=True, sharey=True)
     axes = (mo, tu, we, th, fr, sa, su)
     index = 0
+    xdata = list(range(6, 24))  # 6 AM to 11 PM
     for axis in axes:
-        xdata = list(range(6, 24))
+        #for i in range
         ydata = filedays[index].data.weekdata[index]
-        print filedays[fileindex].data.weekdata[index]
+        print 'Accessing file', fileindex, 'with weekday of', index
+        print filedays[index].data.weekdata[index]
         #print len(xdata), len(ydata)
         axis.plot(xdata, ydata)
 
