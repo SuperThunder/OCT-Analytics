@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import matplotlib.dates as mpldt
 import pandas as pd
-from collections import defaultdict
 from math import isnan
 
 # todo: make plots sorted and labelled by proper datetime
@@ -72,15 +71,13 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
         # so for every file (make a list of these as a list of datafile classes)
         # Then in each of those datafile classes have a weekdaydata class that will contain 23 predicted discrepancies
         # Graphing will then be done Day(subplot for mo-su)->each t-_ line data set graphed by x=1-23 y=prd dcr
-        index = 0
         predictions = []
         currentpredictions = []
-        weekdaydict = defaultdict(list)
         for prd in data['Predicted Discrepancy']:
-            if not isnan(prd):
+            if not isnan(prd):  # this is to deal with the blank lines between days
                 currentpredictions.append(prd)
                 #print prd
-            else:
+            else:  # the blank lines are actually handy to know when a new day of predictions is starting
                 predictions.append(currentpredictions)
                 #print currentpredictions
                 currentpredictions = []
@@ -91,7 +88,10 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
 
         fileindex += 1
 
-    print filedays
+        fig, (mo, tu, we, th, fr, sa, su) = plt.subplots(7, sharex=True, sharey=True)
+
+
+    print title, filedays
 
 class datafile:
     def __init__(self, label, data): # data here is a weekdaydata class
