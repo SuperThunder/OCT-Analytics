@@ -88,10 +88,25 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
 
         fileindex += 1
 
-        fig, (mo, tu, we, th, fr, sa, su) = plt.subplots(7, sharex=True, sharey=True)
-
-
     print title, filedays
+    # Plotting: For each subplot (of each day), plot each t-_ line for that day from 6:00 to 23:00
+    # Each t-_ line can be accessed as filedays[weekday].data.<mon/tue/etc>
+    fig, (mo, tu, we, th, fr, sa, su) = plt.subplots(7, sharex=True, sharey=True)
+    axes = (mo, tu, we, th, fr, sa, su)
+    index = 0
+    for axis in axes:
+        xdata = list(range(6, 24))
+        ydata = filedays[index].data.weekdata[index]
+        print filedays[fileindex].data.weekdata[index]
+        #print len(xdata), len(ydata)
+        axis.plot(xdata, ydata)
+
+        index += 1
+
+        fig.show()
+
+
+
 
 class datafile:
     def __init__(self, label, data): # data here is a weekdaydata class
@@ -100,13 +115,17 @@ class datafile:
 
 class weekdaydata:
     def __init__(self, montosun):
+        self.weekdata = montosun
+        '''
         self.mon = montosun[0]
         self.tue = montosun[1]
         self.wed = montosun[2]
+        ydata = filedays[index].data
         self.thu = montosun[3]
         self.fri = montosun[4]
         self.sat = montosun[5]
         self.sun = montosun[6]
+        '''
 
 
 class plotdata:
