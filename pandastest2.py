@@ -88,6 +88,7 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
 
         fileindex += 1
 
+    # todo: need to iterate through all the file indexes
     print title, filedays
     # Plotting: For each subplot (of each day), plot each t-_ line for that day from 6:00 to 23:00
     # Each t-_ line can be accessed as filedays[weekday].data.<mon/tue/etc>
@@ -97,15 +98,17 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
     xdata = list(range(6, 24))  # 6 AM to 11 PM
     for axis in axes:
         #for i in range
-        ydata = filedays[index].data.weekdata[index]
-        print 'Accessing file', fileindex, 'with weekday of', index
-        print filedays[index].data.weekdata[index]
+        print filedays[0].data.weekdata
+        print 'Accessing file 0', index, 'with weekday of', index
+        # probably need to add a loop here that iterates 0 to len(filedays)
+        ydata = filedays[0].data.weekdata[index]
+        print filedays[0].data.weekdata[index]
         #print len(xdata), len(ydata)
         axis.plot(xdata, ydata)
 
         index += 1
 
-        fig.show()
+    fig.show()
 
 
 
