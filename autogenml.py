@@ -38,6 +38,8 @@ pandastest2.multiplotlinesdt(SVC_FILE_NAMES, SVC_FILE_LABELS, 'Index', 'SVC Pred
                              'Number of minutes before scheduled \n the arrival discrepancy was measured at',
                              'Predicted Discrepancy')
 
+# todo: plot each day by itself for the multi lines
+
 
 '''
 pandastest2.multiplotlines(SVR_FILE_NAMES, SVR_FILE_LABELS, 'Index', 'SVR Predicted Discrepancy',
