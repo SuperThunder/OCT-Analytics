@@ -18,6 +18,8 @@ def plotpoints(FILE_NAME, xlabel, ylabel, title, key):
         plt.ylabel(ylabel)
         plt.title(title)
         plt.show()
+        plt.savefig('./Plots/'+title+'Points plot'+'.png', format='png', dpi=1000)
+
 
 
 def plotlines(FILE_NAME, xlabel, ylabel, title, key):
@@ -30,6 +32,7 @@ def plotlines(FILE_NAME, xlabel, ylabel, title, key):
         plt.ylabel(ylabel)
         plt.title(title)
         plt.show()
+        plt.savefig('./Plots/' + title + 'Line plot' + '.png', format='png', dpi=1000)
 
 
 # file names given in an array
@@ -53,6 +56,7 @@ def multiplotlines(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle, 
     plt.ylabel(ylabel)
     plt.title(title)
     plt.show()
+    plt.savefig('./Plots/' + title + 'Multiple line plot' + '.png', format='png', dpi=1000)
 
 
 # Add each series/line of data to the same plot
@@ -92,29 +96,31 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
     print title, filedays
     # Plotting: For each subplot (of each day), plot each t-_ line for that day from 6:00 to 23:00
     # Each t-_ line can be accessed as filedays[weekday].data.<mon/tue/etc>
-    fig, (mo, tu, we, th, fr, sa, su) = plt.subplots(7, sharex=True, sharey=True)
+    fig, (mo, tu, we, th, fr, sa, su) = plt.subplots(7, sharex=True, sharey=False)
     axes = (mo, tu, we, th, fr, sa, su)
     index = 0
     xdata = list(range(6, 24))  # 6 AM to 11 PM
     for axis in axes:
         print filedays[0].data.weekdata
-        print 'Accessing file 0', index, 'with weekday of', index
+        #print 'Accessing file 0', index, 'with weekday of', index
         # probably need to add a loop here that iterates 0 to len(filedays)
-        ydata = filedays[0].data.weekdata[index]
-        print filedays[0].data.weekdata[index]
-        #print len(xdata), len(ydata)
-        axis.plot(xdata, ydata, color='g', markeredgecolor='None', linewidth=1)
-                  #label=FILE_LABELS[index])  # todo: rotate color with file
+        for i in range(0, len(FILE_NAMES)):
+            print axis, i
+            ydata = filedays[i].data.weekdata[index]
+            #print filedays[0].data.weekdata[index]
+            axis.plot(xdata, ydata, color=colors[i], markeredgecolor='None', linewidth=1,
+                  label=FILE_LABELS[i])
 
         index += 1
 
     #fig.show()
     plt.subplots_adjust(left=0.03, right=0.99, bottom=0.05, top=0.97)
-    #plt.legend(title=legendtitle)
-    #plt.xlabel(xlabel)
+    plt.legend(title=legendtitle)
+    plt.xlabel(xlabel)
     #plt.ylabel(ylabel)
     #plt.title(title)
-    plt.show()
+    #plt.show()
+    plt.savefig('./Plots/' + title + 'Datetime Multiple Lines plot', format='png', dpi=1000)
 
 
 
