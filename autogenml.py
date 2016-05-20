@@ -28,7 +28,7 @@ for i in range(0, 6):
     SVC_FILE_LABELS.append(label)
 
 
-pandastest2.multiplotlinesdt(SVR_FILE_NAMES, SVR_FILE_LABELS, 'Index', 'SVR Predicted Discrepancy',
+pandastest2.multiplotlinesdt(SVR_FILE_NAMES, SVR_FILE_LABELS, 'Time of Arrival (24 HR)', 'SVR Predicted Discrepancy',
                                'SVR Predicted Discrepancy vs Weekdays at Scheduled Arrival Time',
                                'Number of minutes before scheduled \n the arrival discrepancy was measured at',
                                 'Predicted Discrepancy')

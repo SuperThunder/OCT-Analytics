@@ -97,18 +97,24 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
     index = 0
     xdata = list(range(6, 24))  # 6 AM to 11 PM
     for axis in axes:
-        #for i in range
         print filedays[0].data.weekdata
         print 'Accessing file 0', index, 'with weekday of', index
         # probably need to add a loop here that iterates 0 to len(filedays)
         ydata = filedays[0].data.weekdata[index]
         print filedays[0].data.weekdata[index]
         #print len(xdata), len(ydata)
-        axis.plot(xdata, ydata)
+        axis.plot(xdata, ydata, color='g', markeredgecolor='None', linewidth=1)
+                  #label=FILE_LABELS[index])  # todo: rotate color with file
 
         index += 1
 
-    fig.show()
+    #fig.show()
+    plt.subplots_adjust(left=0.03, right=0.99, bottom=0.05, top=0.97)
+    #plt.legend(title=legendtitle)
+    #plt.xlabel(xlabel)
+    #plt.ylabel(ylabel)
+    #plt.title(title)
+    plt.show()
 
 
 
