@@ -100,6 +100,62 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
     print title, filedays
     # Plotting: For each subplot (of each day), plot each t-_ line for that day from 6:00 to 23:00
     # Each t-_ line can be accessed as filedays[weekday].data.<mon/tue/etc>
+    fig, (mo, tu, we, th, fr, sa, su) = plt.subplots(sharex=False, sharey=False, figsize=(19.2, 10.8), nrows=1, ncols=7)
+    axes = (mo, tu, we, th, fr, sa, su)
+    index = 0
+    xdata = list(range(6, 24))  # 6 AM to 11 PM
+    for axis in axes:
+        for i in range(0, len(FILE_NAMES)):
+            ydata = filedays[i].data.weekdata[index]
+            axis.plot(xdata, ydata, color=colors[i], markeredgecolor='None', linewidth=1,
+                  label=FILE_LABELS[i])
+
+        index += 1
+
+    #fig.show()
+    plt.subplots_adjust(left=0.03, right=0.98, bottom=0.05, top=0.97)
+    plt.legend(title=legendtitle)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.title(title)
+    #plt.show()
+    plt.savefig('./Plots/' + title + 'Datetime Multiple Lines plot', format='png', dpi=100)
+    plt.clf()
+
+
+# This will generate a graph for each day of the week
+def indplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle, key):
+    # todo: make some kind of color system so more than 7 plots can be displayed
+    colors = ['g', 'r', 'c', 'm', 'y', 'b', 'k']
+    fileindex = 0
+    filedays = [] # this is a list of datafile classes
+    for name in FILE_NAMES:
+        datasrc = open(name + '.csv', 'rb')
+        data = pd.read_csv(datasrc, parse_dates=True, na_values=['-50', '-100', ''])
+        # Want to make a t-_ list of the classes of daily lists of predicted discrepancies
+        # so for every file (make a list of these as a list of datafile classes)
+        # Then in each of those datafile classes have a weekdaydata class that will contain 23 predicted discrepancies
+        # Graphing will then be done Day(subplot for mo-su)->each t-_ line data set graphed by x=1-23 y=prd dcr
+        predictions = []
+        currentpredictions = []
+        for prd in data['Predicted Discrepancy']:
+            if not isnan(prd):  # this is to deal with the blank lines between days
+                currentpredictions.append(prd)
+                #print prd
+            else:  # the blank lines are actually handy to know when a new day of predictions is starting
+                predictions.append(currentpredictions)
+                #print currentpredictions
+                currentpredictions = []
+        #print len(predictions)
+        weekdata = weekdaydata(predictions)
+        fileday = datafile(FILE_LABELS[fileindex], weekdata)
+        filedays.append(fileday)
+
+        fileindex += 1
+
+    print title, filedays
+    # Plotting: For each subplot (of each day), plot each t-_ line for that day from 6:00 to 23:00
+    # Each t-_ line can be accessed as filedays[weekday].data.<mon/tue/etc>
     fig, (mo, tu, we, th, fr, sa, su) = plt.subplots(7, sharex=False, sharey=False, figsize=(19.2, 10.8))
     axes = (mo, tu, we, th, fr, sa, su)
     index = 0
@@ -121,6 +177,7 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
     #plt.show()
     plt.savefig('./Plots/' + title + 'Datetime Multiple Lines plot', format='png', dpi=100)
     plt.clf()
+
 
 
 
