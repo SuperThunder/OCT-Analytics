@@ -30,12 +30,12 @@ for i in range(0, 6):
 
 pandastest2.multiplotlinesdt(SVR_FILE_NAMES, SVR_FILE_LABELS, 'Time of Arrival (24 HR)', 'SVR Predicted Discrepancy',
                                'SVR Predicted Discrepancy vs Weekdays at Scheduled Arrival Time',
-                               'Number of minutes before scheduled \n the arrival discrepancy was measured at',
+                               'Data Src',
                                 'Predicted Discrepancy')
 
 pandastest2.multiplotlinesdt(SVC_FILE_NAMES, SVC_FILE_LABELS, 'Index', 'SVC Predicted Discrepancy',
                            'SVC Predicted Discrepancy vs Weekdays at Scheduled Arrival Time',
-                             'Number of minutes before scheduled \n the arrival discrepancy was measured at',
+                             'Data Src',
                              'Predicted Discrepancy')
 
 # todo: plot each day by itself for the multi lines
