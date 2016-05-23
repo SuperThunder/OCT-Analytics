@@ -9,7 +9,8 @@ from math import isnan
 
 def plotpoints(FILE_NAME, xlabel, ylabel, title, key):
     with open(FILE_NAME+'.csv', 'rb') as sample:
-        data = pd.read_csv(sample, parse_dates=True, na_values=['-50','-100'])
+        data = pd.read_csv(sample, parse_dates=True, na_values=['-50', '-100'])
+        print type(data)
         indexes = list(range(len(data)))  # Create a list of the indexes to use to graph the time series
         # Can potentially add a color spectrum to this
         plt.figure(figsize=(19.2, 10.8))
@@ -20,7 +21,7 @@ def plotpoints(FILE_NAME, xlabel, ylabel, title, key):
         plt.title(title)
         #plt.show()
         plt.savefig('./Plots/'+title+'Points plot'+'.png', format='png', dpi=100)
-        plt.clf()
+        plt.clf() # clears the plot for next use
 
 
 
@@ -99,10 +100,13 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
     print title, filedays
     # Plotting: For each subplot (of each day), plot each t-_ line for that day from 6:00 to 23:00
     # Each t-_ line can be accessed as filedays[weekday].data.<mon/tue/etc>
-    fig, (mo, tu, we, th, fr, sa, su) = plt.subplots(sharex=True, sharey=True, figsize=(19.2, 10.8), nrows=1, ncols=7)
+    fig, (mo, tu, we, th, fr, sa, su) = plt.subplots(sharex=True, sharey=True, figsize=(25.6, 14.4), nrows=1, ncols=7)
     axes = (mo, tu, we, th, fr, sa, su)
     index = 0
     xdata = list(range(6, 24))  # 6 AM to 11 PM
+    #we.set_xlabel(xlabel)
+    #we.set_ylabel(ylabel)
+    #plt.title(title)
     for axis in axes:
         for i in range(0, len(FILE_NAMES)):
             ydata = filedays[i].data.weekdata[index]
@@ -111,12 +115,12 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
 
         index += 1
 
+    fig.text(x=0.5,y=0.96, xytext=title, ha='center')
     #fig.show()
-    plt.subplots_adjust(left=0.03, right=0.98, bottom=0.05, top=0.97)
+    #fig.tight_layout()  # Avoids overlapping elements, but makes everything very tiny
+    plt.subplots_adjust(left=0.03, right=0.98, bottom=0.1, top=0.90)
     plt.legend(title=legendtitle)
-    plt.xlabel(xlabel)
-    plt.ylabel(ylabel)
-    plt.title(title)
+
     #plt.show()
     plt.savefig('./Plots/' + title + 'Datetime Multiple Lines plot'+'.png', format='png', dpi=100)
     plt.clf()
