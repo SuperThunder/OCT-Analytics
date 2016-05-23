@@ -14,7 +14,7 @@ SAMPLE_NAME = 'currentdata'
 toCSV.toCSV(LEGACY_NAME)
 toCSV.toCSV(CURRENT_NAME)
 
-addolddata.concsv(LEGACY_NAME, CURRENT_NAME)
+addolddata.concsv(LEGACY_NAME, CURRENT_NAME, SAMPLE_NAME)
 
 
 GTFStimes.getStopSchInfo('./google_transit_combined/stop_times.txt', 'AA060', '9')

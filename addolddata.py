@@ -1,22 +1,22 @@
-import pandas as pd
 import csv
 
-def concsv(oldname, newname):
+# Hooray for janky solutions that work
+def concsv(oldname, newname, currentname):
 
     allcols = ['StopNum','RouteNum','PollTime','TimeToNext','NextBusStartTime','TimeTo2nd','TimeTo3rd']
-    outcols = ['StopNum', 'RouteNum', 'PollTime', 'TimeToNext']
 
     legacy = open(oldname+'.csv', 'rb')
     legacyreader = csv.reader(legacy)
-    newlegacy = open(oldname + 'new.csv', 'wb')
-    legacywriter = csv.writer(newlegacy)
-    legacywriter.writerow(allcols)
+    next(legacyreader, None)  # skip header of legacy data
+    new = open(newname + '.csv', 'rb')
+    newreader = csv.reader(new)
+    next(newreader, None)
+    output = open(currentname+'.csv', 'wb')
+    outputwriter = csv.writer(output)
+    outputwriter.writerow(allcols)  # Write the headers
+
     for row in legacyreader:
-        legacywriter.writerow(row+ ['-50', '-50', '-50'])
+        outputwriter.writerow(row + ['-50', '-50', '-50']) # fill in error values for missing data
 
-
-    first = pd.read_csv(oldname+'new.csv', header=0)
-    secnd = pd.read_csv(newname+'.csv', header=0)
-    outpt = pd.concat(objs=[first, secnd])
-
-    outpt.to_csv('currentdata.csv', index=False)
+    for row in newreader:
+        outputwriter.writerow(row)
