@@ -9,7 +9,7 @@ def toCSV(dbName):
     dbFilename = dbName + '.db'
     dbConn = sqlite3.connect(dbFilename)
 
-    csvName = dbName + 'CSV.csv'
+    csvName = dbName + '.csv'
     # Open file in write-only binary mode to ensure Windows doesn't interfere with writing
     with open(csvName, 'wb') as csvFile:
         csvWriter = csv.writer(csvFile)

@@ -8,7 +8,7 @@ def schVsEst(liveCSV, scheduleCSV, minsBeforeArrival):
 
     attribFileName = liveCSV+' Attributes'+'.csv'
     # Split poll times of live data into specific attributes
-    with open(liveCSV+'CSV.csv', 'rb') as liveData:
+    with open(liveCSV+'.csv', 'rb') as liveData:
             with open(attribFileName, 'wb') as attribs:
                 csvLiveReader = csv.reader(liveData)
                 csvAttribWriter = csv.writer(attribs)

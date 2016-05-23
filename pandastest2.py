@@ -19,12 +19,12 @@ def plotpoints(FILE_NAME, xlabel, ylabel, title, key):
         plt.ylabel(ylabel)
         plt.title(title)
         #plt.show()
-        plt.savefig('./Plots/'+title+'Points plot', format='png', dpi=100)
+        plt.savefig('./Plots/'+title+'Points plot'+'.png', format='png', dpi=100)
         plt.clf()
 
 
 
-def plotlines(FILE_NAME, xlabel, ylabel, title, key):
+def plotline(FILE_NAME, xlabel, ylabel, title, key):
     with open(FILE_NAME+'.csv', 'rb') as sample:
         data = pd.read_csv(sample, parse_dates=True, na_values=['-50','-100'])
         indexes = list(range(len(data)))  # Create a list of the indexes to use to graph the time series
@@ -34,7 +34,7 @@ def plotlines(FILE_NAME, xlabel, ylabel, title, key):
         plt.ylabel(ylabel)
         plt.title(title)
         #plt.show()
-        plt.savefig('./Plots/' + title + 'Line plot', format='png', dpi=1000)
+        plt.savefig('./Plots/' + title + 'Line plot'+'.png', format='png', dpi=1000)
         plt.clf()
 
 
@@ -59,7 +59,7 @@ def multiplotlines(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle, 
     plt.ylabel(ylabel)
     plt.title(title)
     #plt.show()
-    plt.savefig('./Plots/' + title + 'Multiple line plot', format='png', dpi=1000)
+    plt.savefig('./Plots/' + title + 'Multiple line plot'+'.png', format='png', dpi=1000)
     plt.clf()
 
 
@@ -96,7 +96,6 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
 
         fileindex += 1
 
-    # todo: need to iterate through all the file indexes
     print title, filedays
     # Plotting: For each subplot (of each day), plot each t-_ line for that day from 6:00 to 23:00
     # Each t-_ line can be accessed as filedays[weekday].data.<mon/tue/etc>
@@ -108,7 +107,7 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
         for i in range(0, len(FILE_NAMES)):
             ydata = filedays[i].data.weekdata[index]
             axis.plot(xdata, ydata, color=colors[i], markeredgecolor='None', linewidth=1,
-                  label=FILE_LABELS[i])
+                  label=FILE_LABELS[i], marker='o')
 
         index += 1
 
@@ -119,7 +118,7 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
     plt.ylabel(ylabel)
     plt.title(title)
     #plt.show()
-    plt.savefig('./Plots/' + title + 'Datetime Multiple Lines plot', format='png', dpi=100)
+    plt.savefig('./Plots/' + title + 'Datetime Multiple Lines plot'+'.png', format='png', dpi=100)
     plt.clf()
 
 

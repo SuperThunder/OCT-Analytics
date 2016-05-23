@@ -3,10 +3,12 @@
 import sklearn_test3
 import pandastest2
 
+SAMPLE_NAME = 'currentdata'
+
 for i in range(0, 6):
     sklearn_test3.genpredictions('currentsample Attributes and Time Discrepencies t-%dmins'%i)
 
-pandastest2.plotpoints('currentsampleCSV', 'Index', 'TimeToNext', 'Index vs TimeToNext Values', 'TimeToNext')
+pandastest2.plotpoints(SAMPLE_NAME, 'Index', 'TimeToNext', 'Index vs TimeToNext Values', 'TimeToNext')
 ''' # This shows the sort of random spread of discrepancies (although concentrated around 0)
 pandastest2.plotpoints('currentsample Attributes and Time Discrepencies t-4mins', 'Index', 'Discrepancy',
                        'Discrepancy vs Index', 'Discrepancy')
