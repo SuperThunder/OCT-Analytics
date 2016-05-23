@@ -4,11 +4,14 @@ import sklearn_test3
 import pandastest2
 
 SAMPLE_NAME = 'currentdata'
+# currentdata Attributes and Time Discrepencies t-0mins
 
 for i in range(0, 6):
-    sklearn_test3.genpredictions('currentsample Attributes and Time Discrepencies t-%dmins'%i)
+    #print(SAMPLE_NAME + ' Attributes and Time Discrepencies t-%dmins'%i)
+    sklearn_test3.genpredictions(SAMPLE_NAME + ' Attributes and Time Discrepencies t-%dmins'%i)
 
-pandastest2.plotpoints(SAMPLE_NAME, 'Index', 'TimeToNext', 'Index vs TimeToNext Values', 'TimeToNext')
+# todo: something goes wrong with this plot
+#pandastest2.plotpoints(SAMPLE_NAME, 'Index', 'TimeToNext', 'Index vs TimeToNext Values', 'TimeToNext')
 ''' # This shows the sort of random spread of discrepancies (although concentrated around 0)
 pandastest2.plotpoints('currentsample Attributes and Time Discrepencies t-4mins', 'Index', 'Discrepancy',
                        'Discrepancy vs Index', 'Discrepancy')
@@ -16,7 +19,7 @@ pandastest2.plotpoints('currentsample Attributes and Time Discrepencies t-4mins'
 SVR_FILE_NAMES = []
 SVR_FILE_LABELS = []
 for i in range(0, 6):
-    name = './Machine learning results/SVR Predictions for currentsample Attributes and Time Discrepencies t-%dmins'%i
+    name = './Machine learning results/SVR Predictions for %s Attributes and Time Discrepencies t-%dmins'%(SAMPLE_NAME,i)
     label = 't-%d'%i
     SVR_FILE_NAMES.append(name)
     SVR_FILE_LABELS.append(label)
@@ -24,7 +27,7 @@ for i in range(0, 6):
 SVC_FILE_NAMES = []
 SVC_FILE_LABELS = []
 for i in range(0, 6):
-    name = './Machine learning results/SVC Predictions for currentsample Attributes and Time Discrepencies t-%dmins'%i
+    name = './Machine learning results/SVC Predictions for %s Attributes and Time Discrepencies t-%dmins'%(SAMPLE_NAME,i)
     label = 't-%d'%i
     SVC_FILE_NAMES.append(name)
     SVC_FILE_LABELS.append(label)

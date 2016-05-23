@@ -99,7 +99,7 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
     print title, filedays
     # Plotting: For each subplot (of each day), plot each t-_ line for that day from 6:00 to 23:00
     # Each t-_ line can be accessed as filedays[weekday].data.<mon/tue/etc>
-    fig, (mo, tu, we, th, fr, sa, su) = plt.subplots(sharex=False, sharey=False, figsize=(19.2, 10.8), nrows=1, ncols=7)
+    fig, (mo, tu, we, th, fr, sa, su) = plt.subplots(sharex=True, sharey=True, figsize=(19.2, 10.8), nrows=1, ncols=7)
     axes = (mo, tu, we, th, fr, sa, su)
     index = 0
     xdata = list(range(6, 24))  # 6 AM to 11 PM
@@ -121,7 +121,7 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
     plt.savefig('./Plots/' + title + 'Datetime Multiple Lines plot'+'.png', format='png', dpi=100)
     plt.clf()
 
-
+'''
 # This will generate a graph for each day of the week
 def indplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle, key):
     # todo: make some kind of color system so more than 7 plots can be displayed
@@ -155,7 +155,7 @@ def indplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle, 
     print title, filedays
     # Plotting: For each subplot (of each day), plot each t-_ line for that day from 6:00 to 23:00
     # Each t-_ line can be accessed as filedays[weekday].data.<mon/tue/etc>
-    fig, (mo, tu, we, th, fr, sa, su) = plt.subplots(7, sharex=False, sharey=False, figsize=(19.2, 10.8))
+    fig, (mo, tu, we, th, fr, sa, su) = plt.subplots(7, sharex=True, sharey=True, figsize=(19.2, 10.8))
     axes = (mo, tu, we, th, fr, sa, su)
     index = 0
     xdata = list(range(6, 24))  # 6 AM to 11 PM
@@ -176,7 +176,7 @@ def indplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle, 
     #plt.show()
     plt.savefig('./Plots/' + title + 'Datetime Multiple Lines plot', format='png', dpi=100)
     plt.clf()
-
+'''
 
 
 
