@@ -32,14 +32,14 @@ for i in range(0, 6):
     SVC_FILE_LABELS.append(label)
 
 
-pandastest2.multiplotlinesdt(SVR_FILE_NAMES, SVR_FILE_LABELS, 'Time of Arrival (24 HR)', 'SVR Predicted Discrepancy',
-                               'SVR Predicted Discrepancy vs Weekdays at Scheduled Arrival Time',
-                               'Data Src',
+pandastest2.multiplotlinesdt(SVR_FILE_NAMES, SVR_FILE_LABELS, 'Time of Arrival (24 HR)', 'SVR Predicted Discrepancy From Scheduled Time (Minutes)',
+                               'Support Vector Regression Predicted Discrepancy vs Weekdays at Scheduled Arrival Time',
+                               'Prediction\nData Source\n(t:scheduled time)',
                                 'Predicted Discrepancy')
 
-pandastest2.multiplotlinesdt(SVC_FILE_NAMES, SVC_FILE_LABELS, 'Time of Arrival (24 HR)', 'SVC Predicted Discrepancy',
-                           'SVC Predicted Discrepancy vs Weekdays at Scheduled Arrival Time',
-                             'Data Src',
+pandastest2.multiplotlinesdt(SVC_FILE_NAMES, SVC_FILE_LABELS, 'Time of Arrival (24 HR)', 'SVC Predicted Discrepancy From Scheduled Time (Minutes)',
+                           'Support Vector Classifier Predicted Discrepancy vs Weekdays at Scheduled Arrival Time',
+                             'Prediction\nData Source\n(t:scheduled time)',
                              'Predicted Discrepancy')
 
 # todo: plot each day by itself for the multi lines

@@ -105,20 +105,23 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
     index = 0
     xdata = list(range(6, 24))  # 6 AM to 11 PM
     #we.set_xlabel(xlabel)
-    #we.set_ylabel(ylabel)
+    mo.set_ylabel(ylabel, size='x-large')  # Set our y axis label for the leftmost subplot
     #plt.title(title)
     for axis in axes:
         for i in range(0, len(FILE_NAMES)):
             ydata = filedays[i].data.weekdata[index]
             axis.plot(xdata, ydata, color=colors[i], markeredgecolor='None', linewidth=1,
                   label=FILE_LABELS[i], marker='o')
+            axis.grid(b=True, which='major', axis='both', color='0.5', linestyle='--')
 
         index += 1
 
-    fig.text(x=0.5,y=0.96, xytext=title, ha='center')
+    fig.text(x=0.5,y=0.96, s=title, ha='center', size='xx-large')
+    fig.text(x=0.5, y=0.01, s=xlabel, ha='center', size='x-large')
     #fig.show()
-    #fig.tight_layout()  # Avoids overlapping elements, but makes everything very tiny
-    plt.subplots_adjust(left=0.03, right=0.98, bottom=0.1, top=0.90)
+
+    plt.subplots_adjust(left=0.03, right=0.98, bottom=0.05, top=0.94)
+
     plt.legend(title=legendtitle)
 
     #plt.show()
@@ -181,8 +184,6 @@ def indplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle, 
     plt.savefig('./Plots/' + title + 'Datetime Multiple Lines plot', format='png', dpi=100)
     plt.clf()
 '''
-
-
 
 class datafile:
     def __init__(self, label, data): # data here is a weekdaydata class
