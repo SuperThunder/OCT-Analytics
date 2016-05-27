@@ -70,6 +70,9 @@ def multiplotlines(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle, 
 # http://matplotlib.org/examples/api/date_demo.html
 def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle, key):
     # todo: make some kind of color system so more than 7 plots can be displayed
+    xres, yres, dpi = 1920, 1080, 100  # set the resolution and dpi and calculate inches to give to mpl
+    xlen = xres/dpi
+    ylen = yres/dpi
     colors = ['g', 'r', 'c', 'm', 'y', 'b', 'k']
     fileindex = 0
     filedays = [] # this is a list of datafile classes
@@ -100,7 +103,7 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
     print title, filedays
     # Plotting: For each subplot (of each day), plot each t-_ line for that day from 6:00 to 23:00
     # Each t-_ line can be accessed as filedays[weekday].data.<mon/tue/etc>
-    fig, (mo, tu, we, th, fr, sa, su) = plt.subplots(sharex=True, sharey=True, figsize=(25.6, 14.4), nrows=1, ncols=7)
+    fig, (mo, tu, we, th, fr, sa, su) = plt.subplots(sharex=True, sharey=True, figsize=(xlen, ylen), nrows=1, ncols=7)
     axes = (mo, tu, we, th, fr, sa, su)
     index = 0
     xdata = list(range(6, 24))  # 6 AM to 11 PM
@@ -125,7 +128,8 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
     plt.legend(title=legendtitle)
 
     #plt.show()
-    plt.savefig('./Plots/' + title + 'Datetime Multiple Lines plot'+'.png', format='png', dpi=100)
+    figname = './Plots/' + title + 'Datetime Multiple Lines plot'+str(xres)+'x'+str(yres)+'d'+str(dpi)+'.png'
+    plt.savefig(figname, format='png', dpi=dpi)
     plt.clf()
 
 '''
