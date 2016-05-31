@@ -70,7 +70,7 @@ def multiplotlines(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle, 
 # http://matplotlib.org/examples/api/date_demo.html
 def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle, key):
     # todo: make some kind of color system so more than 7 plots can be displayed
-    xres, yres, dpi = 1920, 1080, 100  # set the resolution and dpi and calculate inches to give to mpl
+    xres, yres, dpi = 1920, 1080, 125  # set the resolution and dpi and calculate inches to give to mpl
     xlen = xres/dpi
     ylen = yres/dpi
     colors = ['g', 'r', 'c', 'm', 'y', 'b', 'k']
@@ -113,17 +113,17 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
     for axis in axes:
         for i in range(0, len(FILE_NAMES)):
             ydata = filedays[i].data.weekdata[index]
-            axis.plot(xdata, ydata, color=colors[i], markeredgecolor='None', linewidth=1,
+            axis.plot(xdata, ydata, color=colors[i], markeredgecolor='None', linewidth=1.5,
                   label=FILE_LABELS[i], marker='o')
             axis.grid(b=True, which='major', axis='both', color='0.5', linestyle='--')
 
         index += 1
 
-    fig.text(x=0.5,y=0.96, s=title, ha='center', size='xx-large')
+    fig.text(x=0.5, y=0.96, s=title, ha='center', size='xx-large')
     fig.text(x=0.5, y=0.01, s=xlabel, ha='center', size='x-large')
     #fig.show()
 
-    plt.subplots_adjust(left=0.03, right=0.98, bottom=0.05, top=0.94)
+    plt.subplots_adjust(left=0.05, right=0.98, bottom=0.08, top=0.95)
 
     plt.legend(title=legendtitle)
 
