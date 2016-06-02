@@ -70,7 +70,7 @@ def multiplotlines(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle, 
 # http://matplotlib.org/examples/api/date_demo.html
 def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle, key):
     # todo: make some kind of color system so more than 7 plots can be displayed
-    xres, yres, dpi = 1920, 1080, 125  # set the resolution and dpi and calculate inches to give to mpl
+    xres, yres, dpi = 1920, 1080, 120  # set the resolution and dpi and calculate inches to give to mpl
     xlen = xres/dpi
     ylen = yres/dpi
     colors = ['g', 'r', 'c', 'm', 'y', 'b', 'k']
@@ -85,7 +85,7 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
         # Graphing will then be done Day(subplot for mo-su)->each t-_ line data set graphed by x=1-23 y=prd dcr
         predictions = []
         currentpredictions = []
-        for prd in data['Predicted Discrepancy']:
+        for prd in data[key]:
             if not isnan(prd):  # this is to deal with the blank lines between days
                 currentpredictions.append(prd)
                 #print prd

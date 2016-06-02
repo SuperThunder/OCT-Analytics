@@ -23,4 +23,5 @@ for i in range(0, 6):
     print 'Finding discrepancies for', i, 'minutes before'
     checkSchVsEst.schVsEst(SAMPLE_NAME, 'GTFSScheduledTimesAA060-9', i)
 
+import autogenml  # importing runs all non function-contained code
 
