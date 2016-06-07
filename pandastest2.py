@@ -70,10 +70,11 @@ def multiplotlines(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle, 
 # http://matplotlib.org/examples/api/date_demo.html
 def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle, key):
     # todo: make some kind of color system so more than 7 plots can be displayed
-    xres, yres, dpi = 1920, 1080, 120  # set the resolution and dpi and calculate inches to give to mpl
+    xres, yres, dpi = 2560, 1440, 100  # set the resolution and dpi and calculate inches to give to mpl
     xlen = xres/dpi
     ylen = yres/dpi
     colors = ['g', 'r', 'c', 'm', 'y', 'b', 'k']
+    daynames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     fileindex = 0
     filedays = [] # this is a list of datafile classes
     for name in FILE_NAMES:
@@ -110,14 +111,18 @@ def multiplotlinesdt(FILE_NAMES, FILE_LABELS, xlabel, ylabel, title, legendtitle
     #we.set_xlabel(xlabel)
     mo.set_ylabel(ylabel, size='x-large')  # Set our y axis label for the leftmost subplot
     #plt.title(title)
-    for axis in axes:
+    for axis in axes:  # Create each t-_ line for each day by getting them from the seperate files
         for i in range(0, len(FILE_NAMES)):
             ydata = filedays[i].data.weekdata[index]
-            axis.plot(xdata, ydata, color=colors[i], markeredgecolor='None', linewidth=1.5,
+            axis.plot(xdata, ydata, color=colors[i], markeredgecolor='None', linewidth=1.3,
                   label=FILE_LABELS[i], marker='o')
             axis.grid(b=True, which='major', axis='both', color='0.5', linestyle='--')
 
         index += 1
+
+    # Add the day names (Monday, Tuesday, etc) to the subplots
+    for i in range(0, 6+1):
+        axes[i].set_xlabel(daynames[i])
 
     fig.text(x=0.5, y=0.96, s=title, ha='center', size='xx-large')
     fig.text(x=0.5, y=0.01, s=xlabel, ha='center', size='x-large')
