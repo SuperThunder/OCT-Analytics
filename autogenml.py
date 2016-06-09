@@ -3,7 +3,7 @@
 import sklearn_test3
 import pandastest2
 
-SAMPLE_NAME = 'currentsample'
+SAMPLE_NAME = 'currentdata'
 
 for i in range(0, 6):
     #print(SAMPLE_NAME + ' Attributes and Time Discrepencies t-%dmins'%i)
